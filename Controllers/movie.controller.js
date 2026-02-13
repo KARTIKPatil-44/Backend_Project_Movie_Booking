@@ -1,55 +1,56 @@
 const Movie = require("../models/movie.model");
-
+const moiveServices = require("../Services/movie.services");
+const {successResponseBody,errorResponseBody} = require("../utils/responseBody")
 
 const createMovie = async (req, res) => {
   try {
-    const movie = await Movie.create(req.body);
+    const movie = await moiveServices.createMovie(req.body);
 
-    return res.status(201).json({
-      success: true,
-      error: {},
-      data: movie,
-      message: "Successfully created a new movie",
-    });
+    successResponseBody.data = movie;
+    successResponseBody.message = "Successfully created the movie";
 
+    return res.status(201).json(successResponseBody);
   } catch (err) {
     console.log(err);
-    return res.status(500).json({
-      success: false,
-      error: err,
-      data: {},
-      message: "Somthing went wrong",
-    });
+    return res.status(500).json(errorResponseBody);
   }
 };
 
 const deleteMovie = async (req, res) => {
   try {
-    const response = await Movie.deleteOne({
-      _id: req.params.movieId,
+    const response = await moiveServices.deleteMovie(req.params.id);
 
-    });
-    return res.status(201).json({
-      success: true,
-      error: {},
-      message: "Successfully deleted the movie",
-      data: response,
-    });
+    successResponseBody.data = response;
+    successResponseBody.message = "Successfully deleted the movie";
 
+    return res.status(201).json(successResponseBody);
+  } catch (err) {
+    return res.status(500).json(errorResponseBody);
+  }
+};
+
+const getMovie = async (req, res) => {
+  try {
+    const response = await moiveServices.getMoiveById(req.params.id);
+
+    if (response.err) {
+      errorResponseBody.err = response.err;
+      return res.status(response.code).json(errorResponseBody);
+    }
+
+    successResponseBody.data = response;
+    return res.status(200).json(successResponseBody);
   } catch (err) {
     return res.status(500).json({
       success: false,
       error: err,
-      message: "Somthing went wrong",
-      data: {},
+      message: "Somthing went wrong cannot proccess the request",
     });
   }
 };
 
-
-
-
 module.exports = {
   createMovie,
   deleteMovie,
+  getMovie,
 };
