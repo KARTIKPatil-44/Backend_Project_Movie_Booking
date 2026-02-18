@@ -13,6 +13,6 @@ const successResponseBody = {
 };
 
 module.exports = {
-  successResponseBody,
+  successResponseBody,  
   errorResponseBody,
 };
