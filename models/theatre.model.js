@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 /**
- * Defines the Schema of the Theater resource to be stored in db
+ * Defines the Schema of the Theatre resource to be stored in db.
  */
 
-const theaterSchema = mongoose.Schema(
+const theatreSchema = mongoose.Schema(
   {
     name: {
       type: String,
@@ -27,6 +27,6 @@ const theaterSchema = mongoose.Schema(
   { timestamps: true },
 );
 
-const Theater = mongoose.model("Theater", theaterSchema);
+const Theatre = mongoose.model("Theater", theatreSchema);
 
-module.exports = Theater;
+module.exports = Theatre;
