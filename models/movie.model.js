@@ -1,16 +1,20 @@
 const mongoose = require("mongoose");
 
+/**
+ * Defines the Schema of the movie resource to be stored in db
+ */
+
 const movieSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
-      minLength:2,
+      minLength: 2,
     },
     description: {
       type: String,
       required: true,
-      minLength:5
+      minLength: 5,
     },
     casts: {
       type: [String],

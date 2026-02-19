@@ -1,9 +1,9 @@
-const moiveServices = require("../Services/movie.services");
+const movieServices = require("../Services/movie.services");
 const {successResponseBody,errorResponseBody} = require("../utils/responseBody")
 
 const createMovie = async (req, res) => {
   try {
-    const response = await moiveServices.createMovie(req.body);
+    const response = await movieServices.createMovie(req.body);
     if(response.err){
       errorResponseBody.err = response.err;
       errorResponseBody.message = "Validation failed on few parameter of the request body"
@@ -21,7 +21,7 @@ const createMovie = async (req, res) => {
 
 const deleteMovie = async (req, res) => {
   try {
-    const response = await moiveServices.deleteMovie(req.params.id);
+    const response = await movieServices.deleteMovie(req.params.id);
 
     successResponseBody.data = response;
     successResponseBody.message = "Successfully deleted the movie";
@@ -34,7 +34,7 @@ const deleteMovie = async (req, res) => {
 
 const getMovie = async (req, res) => {
   try {
-    const response = await moiveServices.getMoiveById(req.params.id);
+    const response = await movieServices.getMoiveById(req.params.id);
 
     if (response.err) {
       errorResponseBody.err = response.err;
@@ -54,7 +54,7 @@ const getMovie = async (req, res) => {
 
 const updateMoive = async(req,res)=>{
   try{
-    const  response = await moiveServices.updateMoive(req.params.id, req.body);
+    const  response = await movieServices.updateMoive(req.params.id, req.body);
 
     if(response.err){
       errorResponseBody.err = response.err;
@@ -70,9 +70,31 @@ const updateMoive = async(req,res)=>{
   }
 }
 
+const getMovies = async (req, res) => {
+  try {
+    const response = await movieServices.fetchMovies(req.query);
+
+    if (response.err) {
+      errorResponseBody.err = response.err;
+      errorResponseBody.message = "The movie does not exist";
+      return res.status(response.code).json(errorResponseBody);
+    }
+
+    successResponseBody.data = response;
+    return res.status(200).json(successResponseBody);
+
+  } catch (err) {
+    console.log(err);
+    errorResponseBody.data = err;
+    return res.status(500).json(errorResponseBody);
+  }
+};
+
+
 module.exports = {
   createMovie,
   deleteMovie,
   getMovie,
   updateMoive,
+  getMovies,
 };
