@@ -8,18 +8,19 @@ const theatreSchema = mongoose.Schema(
   {
     name: {
       type: String,
-      require: true,
+      required: true,
+      minLength: 5,
     },
     description: String,
 
     city: {
       type: String,
-      require: true,
+      required: true,
     },
 
     pincode: {
       type: String,
-      require: true,
+      required: true,
     },
 
     address: String,
