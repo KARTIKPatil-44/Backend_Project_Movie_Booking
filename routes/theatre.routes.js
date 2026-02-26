@@ -9,15 +9,14 @@ const routes = (app) => {
     theatreController.createTheatre,
   );
 
+  // DELETE REQUEST
+  app.delete("/mba/api/v1/theatres/:id", theatreController.destroy);
+
   // GET FETCH REQUEST
-  app.get(
-    "/mba/api/v1/theatres/:id",
-     theatreController.getTheatre);
+  app.get("/mba/api/v1/theatres/:id", theatreController.getTheatre);
 
   //GET  FETCH REQUEST ALL THEATRES
-  app.get(
-    "/mba/api/v1/theatres",
-     theatreController.getTheatres);
+  app.get("/mba/api/v1/theatres", theatreController.getTheatres);
 };
 
 module.exports = routes;
