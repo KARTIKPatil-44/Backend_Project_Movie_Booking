@@ -6,7 +6,7 @@ const createTheatre = async (data) => {
     return response;
   } catch (error) {
     if (error.name === "ValidationError") {
-      let err={};
+      let err = {};
       Object.keys(error.errors).forEach((key) => {
         err[key] = error.errors[key].message;
       });
@@ -18,6 +18,44 @@ const createTheatre = async (data) => {
   }
 };
 
+const deleteTheatre = async (id) => {
+  try {
+    const response = await Theatre.findByIdAndDelete(id);
+    if (!response) {
+      return {
+        err: "No record of a theatre found for the given id",
+        code: 404,
+      };
+    }
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+/**
+ *  @param id  -> it is the unique _id based on which we will fetch a theater
+ */
+
+const getTheatre = async (id) => {
+  try {
+    const response = await Theatre.findById(id);
+    if (!response) {
+      return {
+        err: "No theatre found for the given id",
+        code: 404,
+      };
+    }
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 module.exports = {
   createTheatre,
+  getTheatre,
+  deleteTheatre,
 };
