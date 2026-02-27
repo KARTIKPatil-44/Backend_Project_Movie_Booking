@@ -5,6 +5,13 @@ const badRequestResponse = {
   message: "Malformed Request | Bad Request",
 };
 
+/**
+ *
+ * @param  req -> HTTP request object
+ * @param  res -> HTTP response object
+ * @param  next -> next middleware function
+ * @returns -> wheathre the request is valid or not
+ */
 const validateMovieCreateRequest = async (req, res, next) => {
   // validate the movie name
   if (!req.body.name) {
@@ -14,7 +21,8 @@ const validateMovieCreateRequest = async (req, res, next) => {
   }
   // validate the movie description
   if (!req.body.description) {
-    badRequestResponse.err ="The name of the description is not present in the request";
+    badRequestResponse.err =
+      "The name of the description is not present in the request";
     return res.status(400).json(badRequestResponse);
   }
   // validate the casts
@@ -23,7 +31,8 @@ const validateMovieCreateRequest = async (req, res, next) => {
     !(req.body.casts instanceof Array) ||
     req.body.casts.length <= 0
   ) {
-    badRequestResponse.err ="The name of the casts is not present in the request";
+    badRequestResponse.err =
+      "The name of the casts is not present in the request";
     return res.status(400).json(badRequestResponse);
   }
   // validate the trailerUrl
@@ -33,7 +42,7 @@ const validateMovieCreateRequest = async (req, res, next) => {
   }
   // validate the language
   if (!req.body.language) {
-    badRequestResponse.err ="The  language is not present in the request";
+    badRequestResponse.err = "The  language is not present in the request";
     return res.status(400).json(badRequestResponse);
   }
   // validate the releaseDate

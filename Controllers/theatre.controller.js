@@ -1,9 +1,11 @@
 const theatreServices = require("../Services/theatre.services");
-const {
-  successResponseBody,
-  errorResponseBody,
-} = require("../utils/responseBody");
+const {successResponseBody,errorResponseBody,} = require("../utils/responseBody");
 
+/**
+ * 
+ * Controller function to create a new theatre
+ * @returns  created theatre details
+ */
 const createTheatre = async (req, res) => {
   try {
     const responce = await theatreServices.createTheatre(req.body);
@@ -22,6 +24,11 @@ const createTheatre = async (req, res) => {
   }
 };
 
+/**
+ * 
+ * Controller function to delete a theatre by ID
+ * @returns  deleted theatre details
+ */
 const destroy = async (req, res) => {
   try {
     const responce = await theatreServices.deleteTheatre(req.params.id);
@@ -38,6 +45,11 @@ const destroy = async (req, res) => {
   }
 };
 
+/**
+ * 
+ * Controller function to fetch a theatre by its ID
+ * @returns  theatre details
+ */
 const getTheatre = async (req, res) => {
   try {
     const responce = await theatreServices.getTheatre(req.params.id);
@@ -55,6 +67,11 @@ const getTheatre = async (req, res) => {
   }
 };
 
+/**
+ * 
+ * Controller function to fetch all theatres
+ * @returns  list of theatres
+ */
 const getTheatres = async (req, res) => {
   try {
     const responce = await theatreServices.getAllTheatres();

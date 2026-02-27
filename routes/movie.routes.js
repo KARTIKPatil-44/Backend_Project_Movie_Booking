@@ -2,27 +2,26 @@ const movieController = require("../Controllers/movie.controller");
 const movieMiddlewares = require("../Middlewares/movie.middlewares");
 
 const routes = (app) => {
+  // routes fucntion takes express app object as parameter
 
-  // POST REQUEST
+  // CREATE
   app.post(
-    "/mba/api/v1/movies",
-    movieMiddlewares.validateMovieCreateRequest,
-    movieController.createMovie,
+    "/mba/api/v1/movies",movieMiddlewares.validateMovieCreateRequest, movieController.createMovie,
   );
 
-  // DELETE REQUEST
+  // DELETE
   app.delete("/mba/api/v1/movies/:id", movieController.deleteMovie);
 
-  // GET REQUEST
+  // READ
   app.get("/mba/api/v1/movies/:id", movieController.getMovie);
 
-  // PUT REQUEST
+  // READ
   app.put("/mba/api/v1/movies/:id", movieController.updateMoive);
 
-  // PATCH REQUEST
+  // UPDATE
   app.patch("/mba/api/v1/movies/:id", movieController.updateMoive);
 
-  //GET REQUEST FOR FETCHING MOVIES
+  // UPDATE
   app.get("/mba/api/v1/movies", movieController.getMovies);
 };
 module.exports = routes;

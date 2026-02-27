@@ -1,6 +1,11 @@
 const movieServices = require("../Services/movie.services");
 const {successResponseBody,errorResponseBody} = require("../utils/responseBody")
 
+/**
+ * 
+ * Controller function to create a new movie
+ * @returns  movie created
+ */
 const createMovie = async (req, res) => {
   try {
     const response = await movieServices.createMovie(req.body);
@@ -19,6 +24,11 @@ const createMovie = async (req, res) => {
   }
 };
 
+/**
+ * 
+ * Controller function to delete an existing movie
+ * @returns  deleted movie details
+ */
 const deleteMovie = async (req, res) => {
   try {
     const response = await movieServices.deleteMovie(req.params.id);
@@ -36,6 +46,11 @@ const deleteMovie = async (req, res) => {
   }
 };
 
+/**
+ * 
+ * Controller function to fetch a movie by its ID
+ * @returns  movie details
+ */
 const getMovie = async (req, res) => {
   try {
     const response = await movieServices.getMoiveById(req.params.id);
@@ -56,6 +71,11 @@ const getMovie = async (req, res) => {
   }
 };
 
+/**
+ * 
+ * Controller function to update an existing movie
+ * @returns  updated movie details
+ */
 const updateMoive = async(req,res)=>{
   try{
     const  response = await movieServices.updateMoive(req.params.id, req.body);
@@ -74,6 +94,11 @@ const updateMoive = async(req,res)=>{
   }
 }
 
+/**
+ * 
+ * Controller function to fetch all movies based on query parameters
+ * @returns  list of movies
+ */
 const getMovies = async (req, res) => {
   try {
     const response = await movieServices.fetchMovies(req.query);

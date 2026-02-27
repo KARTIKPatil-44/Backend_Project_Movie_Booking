@@ -1,3 +1,6 @@
+/**
+ *  This object will be used as a template for building error response
+ */
 const errorResponseBody = {
   err: {},
   data: {},
@@ -5,6 +8,9 @@ const errorResponseBody = {
   success: false,
 };
 
+/**
+ * This object will be used as a template for building success response
+ */
 const successResponseBody = {
   err: {},
   data: {},
@@ -13,6 +19,6 @@ const successResponseBody = {
 };
 
 module.exports = {
-  successResponseBody,  
+  successResponseBody,
   errorResponseBody,
 };

@@ -1,5 +1,10 @@
 const Movie = require("../models/movie.model");
 
+/**
+ *
+ * @param  data -> object containing details of the new moivie to be created
+ * @returns -> the new movie object created
+ */
 const createMovie = async (data) => {
   try {
     const movie = await Movie.create(data);
@@ -17,22 +22,33 @@ const createMovie = async (data) => {
     }
   }
 };
+
+/**
+ *
+ * @param  id -> id which will be used to identify the movie to be deleted
+ * @returns -> object containing  details of the moive deleted
+ */
 const deleteMovie = async (id) => {
   try {
     const response = await Movie.findByIdAndDelete(id);
-    if(!response){
-      return{
+    if (!response) {
+      return {
         err: "No moive record found for the id provided",
         code: 404,
-      }
+      };
     }
-      return response;
+    return response;
   } catch (error) {
     console.log(error);
     throw error;
   }
 };
 
+/**
+ *
+ * @param  id -> id which will be used to identify the movie to be fetched
+ * @returns -> object containing movie fetched
+ */
 const getMoiveById = async (id) => {
   const movie = await Movie.findById(id);
   console.log("moive found", movie);
@@ -45,6 +61,12 @@ const getMoiveById = async (id) => {
   return movie;
 };
 
+/**
+ *
+ * @param  id -> id which will be used to identify the movie to be updated
+ * @param  data -> object that contains actual data which is to be updated in the db
+ * @returns -> returs the new updated movie details
+ */
 const updateMoive = async (id, data) => {
   try {
     const moive = await Movie.findByIdAndUpdate(id, data, {
@@ -66,6 +88,11 @@ const updateMoive = async (id, data) => {
   }
 };
 
+/**
+ *
+ * @param  filter -> filter will help us in filtering out data based on the conditions
+ * @returns -> returns an object containing all the movies fetched based on the filter
+ */
 const fetchMovies = async (filter) => {
   let query = {};
   if (filter.name) {
