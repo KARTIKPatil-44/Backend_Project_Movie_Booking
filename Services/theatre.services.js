@@ -1,7 +1,7 @@
 const Theatre = require("../models/theatre.model");
 
 /**
- * 
+ *
  * @param  data -> object containing details of the theatre to be created
  * @returns ->  object with the new theatre
  */
@@ -24,7 +24,7 @@ const createTheatre = async (data) => {
 };
 
 /**
- * 
+ *
  * @param  id -> the unique id using which we can identify the theatre to be deleted
  * @returns -> rturns the deleted theatre
  */
@@ -45,9 +45,9 @@ const deleteTheatre = async (id) => {
 };
 
 /**
- * 
+ *
  * @param id  -> it is the unique _id based on which we will fetch a theater
- * 
+ *
  */
 const getTheatre = async (id) => {
   try {
@@ -67,27 +67,77 @@ const getTheatre = async (id) => {
 
 /**
  * @param data -> the data to be used to filter out theatres based on city / pincode
- * @returns -> returns an object with the filtered content of theatres 
+ * @returns -> returns an object with the filtered content of theatres
  */
-const getAllTheatres = async () => {
+const getAllTheatres = async (data) => {
   try {
-    const response = await Theatre.find({});
+    let query = {};
+    let pagination = {};
+
+    if (data && data.city) {
+      query.city = data.city;
+    }
+
+    if (data && data.pincode) {
+      query.pincode = data.pincode;
+    }
+
+    if (data && data.name) {
+      query.name = data.name;
+    }
+
+    if (data && data.limit) {
+      pagination.limit = parseInt(data.limit);
+    }
+
+    if (data && data.skip) {
+      let perPage = data.limit ? parseInt(data.limit) : 3;
+      pagination.skip = parseInt(data.skip) * perPage;
+    }
+
+    const response = await Theatre.find(query, {}, pagination);
     return response;
+
   } catch (error) {
-    console.log(err);
+    console.log(error);
     throw error;
   }
 };
+
 
 /**
  * @param id -> the unique id to identify the theatre to be updated
  * @param data -> data object to be used to update the theatre
  * @returns -> it returns the new updated theatre object
  */
+  const updateTheatre = async (id, data) =>{
+    try{
+      const response = await Theatre.findByIdAndUpdate(id, data, {
+        new : true, runValidators: true
+      });
+      if(!response){
+        return {
+          err: "No theatre found for the given id",
+          code: 404
+        }
+      }
+      return response;
+    }catch(error){
+      if(error.name === "ValidationError"){
+        let err = {};
+        Object.keys(error.errors).forEach((key) =>{
+          err[key] = error.errors[key].message;
+        });
+        return {err: err, code: 422}
+      }
+      throw error
+    }
+  }
 
 module.exports = {
   createTheatre,
   getTheatre,
   deleteTheatre,
   getAllTheatres,
+  updateTheatre,
 };

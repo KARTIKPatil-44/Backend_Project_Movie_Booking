@@ -19,8 +19,10 @@ const routes = (app) => {
   app.get("/mba/api/v1/theatres", theatreController.getTheatres);
 
   // UPDATE
+  app.patch("/mba/api/v1/theatres/:id",theatreController.update);
 
   // UPDATE
+  app.put("/mba/api/v1/theatres/:id",theatreController.update);
 };
 
 module.exports = routes;
