@@ -75,14 +75,17 @@ const getAllTheatres = async (data) => {
     let pagination = {};
 
     if (data && data.city) {
+      // this checks wheater city is present in query params or no
       query.city = data.city;
     }
 
     if (data && data.pincode) {
+      // this checks wheater pincode is present in query params or no
       query.pincode = data.pincode;
     }
 
     if (data && data.name) {
+      // this checks wheather name is present in query params or no
       query.name = data.name;
     }
 
@@ -91,6 +94,7 @@ const getAllTheatres = async (data) => {
     }
 
     if (data && data.skip) {
+      // for first page we send skip as 0
       let perPage = data.limit ? parseInt(data.limit) : 3;
       pagination.skip = parseInt(data.skip) * perPage;
     }
@@ -134,7 +138,7 @@ const updateTheatre = async (id, data) => {
 };
 
 /**
- * 
+ *
  * @param  theatreId -> unique id of the theatre for which we want to update movies
  * @param  movieIds -> array of movie ids that are expected to be updated in theatre
  * @param  insert -> boolean that tells wheather we want insert movies or remove them
@@ -184,7 +188,7 @@ const updateMoiviesInTheatres = async (theatreId, movieIds, insert) => {
 
     movieIds.forEach((movieId) => {
       savedMovieIds = savedMovieIds.filter(
-        (smi) => smi.toString() !== movieId.toString()
+        (smi) => smi.toString() !== movieId.toString(),
       );
     });
 
@@ -195,7 +199,6 @@ const updateMoiviesInTheatres = async (theatreId, movieIds, insert) => {
 
   return theatre.populate("movies");
 };
-
 
 module.exports = {
   createTheatre,
