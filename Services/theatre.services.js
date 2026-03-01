@@ -97,42 +97,105 @@ const getAllTheatres = async (data) => {
 
     const response = await Theatre.find(query, {}, pagination);
     return response;
-
   } catch (error) {
     console.log(error);
     throw error;
   }
 };
 
-
 /**
  * @param id -> the unique id to identify the theatre to be updated
  * @param data -> data object to be used to update the theatre
  * @returns -> it returns the new updated theatre object
  */
-  const updateTheatre = async (id, data) =>{
-    try{
-      const response = await Theatre.findByIdAndUpdate(id, data, {
-        new : true, runValidators: true
-      });
-      if(!response){
-        return {
-          err: "No theatre found for the given id",
-          code: 404
-        }
-      }
-      return response;
-    }catch(error){
-      if(error.name === "ValidationError"){
-        let err = {};
-        Object.keys(error.errors).forEach((key) =>{
-          err[key] = error.errors[key].message;
-        });
-        return {err: err, code: 422}
-      }
-      throw error
+const updateTheatre = async (id, data) => {
+  try {
+    const response = await Theatre.findByIdAndUpdate(id, data, {
+      new: true,
+      runValidators: true,
+    });
+    if (!response) {
+      return {
+        err: "No theatre found for the given id",
+        code: 404,
+      };
     }
+    return response;
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      let err = {};
+      Object.keys(error.errors).forEach((key) => {
+        err[key] = error.errors[key].message;
+      });
+      return { err: err, code: 422 };
+    }
+    throw error;
   }
+};
+
+/**
+ * 
+ * @param  theatreId -> unique id of the theatre for which we want to update movies
+ * @param  movieIds -> array of movie ids that are expected to be updated in theatre
+ * @param  insert -> boolean that tells wheather we want insert movies or remove them
+ * @returns -> updated theatre object
+ */
+// const updateMoiviesInTheatres = async (theatreId, movieIds, insert) => {
+//   const theatre = await Theatre.findById(theatreId);
+//   if (!theatre) {
+//     return {
+//       err: "No such theatre found for the id provided",
+//       code: 404,
+//     };
+//   }
+//   if (insert) {
+//     // we need to add movies
+//     movieIds.forEach((movieId) => {
+//       theatre.movies.push(movieId);
+//     });
+//   } else {
+//     // we need to remove movies
+//     let savedMovieIds = theatre.movies;
+//     movieIds.forEach((movieId) => {
+//       savedMovieIds = savedMovieIds.filter((smi) => (smi = movieId));
+//     });
+//     theatre.movies = savedMovieIds;
+//   }
+//   await theatre.save();
+//   return theatre.populate("movies");
+// };
+
+const updateMoiviesInTheatres = async (theatreId, movieIds, insert) => {
+  const theatre = await Theatre.findById(theatreId);
+
+  if (!theatre) {
+    return {
+      err: "No such theatre found for the id provided",
+      code: 404,
+    };
+  }
+
+  if (insert) {
+    movieIds.forEach((movieId) => {
+      theatre.movies.push(movieId);
+    });
+  } else {
+    let savedMovieIds = theatre.movies;
+
+    movieIds.forEach((movieId) => {
+      savedMovieIds = savedMovieIds.filter(
+        (smi) => smi.toString() !== movieId.toString()
+      );
+    });
+
+    theatre.movies = savedMovieIds;
+  }
+
+  await theatre.save();
+
+  return theatre.populate("movies");
+};
+
 
 module.exports = {
   createTheatre,
@@ -140,4 +203,5 @@ module.exports = {
   deleteTheatre,
   getAllTheatres,
   updateTheatre,
+  updateMoiviesInTheatres,
 };
