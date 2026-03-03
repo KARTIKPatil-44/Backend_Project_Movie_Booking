@@ -1,4 +1,5 @@
 const Theatre = require("../models/theatre.model");
+const Movie = require("../models/movie.model");
 
 /**
  *
@@ -89,6 +90,13 @@ const getAllTheatres = async (data) => {
       query.name = data.name;
     }
 
+    if (data && data.movieId) {
+      // This checks whether movieId is present in query params.
+      // If provided, it filters theatres that contain ALL the given movieIds
+      // inside their 'movies' array field.
+      query.movies = { $all: data.movieId };
+    }
+
     if (data && data.limit) {
       pagination.limit = parseInt(data.limit);
     }
@@ -176,13 +184,13 @@ const updateMoiviesInTheatres = async (theatreId, movieIds, insert) => {
       theater = await Theatre.findByIdAndUpdate(
         { _id: theatreId },
         { $addToSet: { movies: { $each: movieIds } } },
-        { new: true }
+        { new: true },
       );
     } else {
       theater = await Theatre.findByIdAndUpdate(
         { _id: theatreId },
         { $pull: { movies: { $in: movieIds } } },
-        { new: true }
+        { new: true },
       );
     }
     return theater.populate("movies");
