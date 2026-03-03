@@ -171,19 +171,21 @@ const updateTheatre = async (id, data) => {
 
 const updateMoiviesInTheatres = async (theatreId, movieIds, insert) => {
   try {
+    let theater;
     if (insert) {
-      await Theatre.updateOne(
+      theater = await Theatre.findByIdAndUpdate(
         { _id: theatreId },
         { $addToSet: { movies: { $each: movieIds } } },
+        { new: true }
       );
     } else {
-      await Theatre.updateOne(
+      theater = await Theatre.findByIdAndUpdate(
         { _id: theatreId },
         { $pull: { movies: { $in: movieIds } } },
+        { new: true }
       );
     }
-    const theatre = await Theatre.findById(theatreId);
-    return await theatre.populate("movies");
+    return theater.populate("movies");
   } catch (error) {
     if (error.name === "TypeError") {
       return {
