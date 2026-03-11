@@ -2,8 +2,8 @@ const User = require("../models/user.model");
 
 const createUser = async (data) => {
   try {
-    const responce = await User.create(data);
-    return responce;
+    const response = await User.create(data);
+    return response;
   } catch (error) {
     console.log(error);
     throw error;
