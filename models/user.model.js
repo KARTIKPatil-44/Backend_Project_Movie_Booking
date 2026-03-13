@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const { USER_ROLE, USER_STATUS } = require('../utils/constants');
 
 const userSchema = new mongoose.Schema(
   {
@@ -29,23 +30,30 @@ const userSchema = new mongoose.Schema(
 
     userRole: {
       type: String,
-      default: "CUSTOMER",
+      require: true,
+      enum: {
+        values: [USER_ROLE.customer, USER_ROLE.admin, USER_ROLE.client],
+        message: "Invalid user role given",
+      },
+      default: USER_ROLE.customer
     },
 
     userStatus: {
       type: String,
-      default: "APPROVED",
+      require:true,
+      enum: {
+        values: [USER_STATUS.approved, USER_STATUS.pending, USER_STATUS.rejected],
+        message: "Invalid status for user given",
+      },
+      default: USER_STATUS.approved
     },
   },
   { timestamps: true },
 );
 userSchema.pre("save", async function (/**next */) {
   // a trigger to encrypt the plain password befor saving the user
-  console.log(this);
   const hash = await bcrypt.hash(this.password, 10);
-  console.log(hash);
   this.password = hash;
-  console.log(this);
   //next()
 });
 
