@@ -1,5 +1,8 @@
 const userService = require("../Services/user.services");
-const {errorResponseBody,successResponseBody,} = require("../utils/responseBody");
+const {
+  errorResponseBody,
+  successResponseBody,
+} = require("../utils/responseBody");
 
 const signUp = async (req, res) => {
   try {
@@ -8,6 +11,10 @@ const signUp = async (req, res) => {
     successResponseBody.message = "Successfully registered user";
     return res.status(201).json(successResponseBody);
   } catch (error) {
+    if (error.err) {
+      errorResponseBody.err = error.err;
+      return res.status(error.code).json(errorResponseBody);
+    }
     errorResponseBody.err = error;
     return res.status(500).json(errorResponseBody);
   }
