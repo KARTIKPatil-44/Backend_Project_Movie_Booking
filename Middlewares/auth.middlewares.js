@@ -1,3 +1,5 @@
+const jwt = require("jsonwebtoken");
+const userServices = require("../Services/user.services");
 const { errorResponseBody } = require("../utils/responseBody");
 
 /**
@@ -5,7 +7,7 @@ const { errorResponseBody } = require("../utils/responseBody");
  * @param  req -> http request object
  * @param  res -> http response object
  * @param  next -> next middleware
- * @returns 
+ * @returns
  */
 const validateSignUpRequest = async (req, res, next) => {
   // validate the name for the user
@@ -35,27 +37,56 @@ const validateSignUpRequest = async (req, res, next) => {
  * @param  req -> http request object
  * @param  res -> http response object
  * @param  next -> next middleware
- * @returns 
+ * @returns
  */
-const validateSignInRequest = async (req,res, next) =>{
+const validateSignInRequest = async (req, res, next) => {
   // validate user email presence
-  if(!req.body.email){
+  if (!req.body.email) {
     errorResponseBody.err = "No email provided for sign in";
     return res.status(400).json(errorResponseBody);
   }
 
   // validate user password presence
-  if(!req.body.password){
+  if (!req.body.password) {
     errorResponseBody.err = "No password provided for sign in";
     return res.status(400).json(errorResponseBody);
-  } 
+  }
 
   // request is valid
   next();
+};
 
+const isAuthenticated = async (req, res, next) => {
+  try {
+    const token = req.headers["x-access-token"];
+    if (!token) {
+      errorResponseBody.err = "No token provided";
+      return res.status(403).json(errorResponseBody);
+    }
+    const response = jwt.verify(token, process.env.AUTH_KEY);
+    if (!response) {
+      errorResponseBody.err = "Token not verified";
+      return res.status(401).json(errorResponseBody);
+    }
+    const user = await userServices.getUserById(response.id);
+    req.user = user.id;
+    next();
+  } catch (error) {
+    if(error.name == "JsonWebTokenError" ){
+      errorResponseBody.err = error.message;
+      return res.status(401).json(errorResponseBody);
+    }
+    if (error.code == 404) {
+      errorResponseBody.err = "User dosen't exist";
+      return res.status(error.code).json(errorResponseBody);
+    }
+    errorResponseBody.err = error;
+    return res.status(500).json(errorResponseBody);
+  }
 };
 
 module.exports = {
   validateSignUpRequest,
-  validateSignInRequest
+  validateSignInRequest,
+  isAuthenticated,
 };
