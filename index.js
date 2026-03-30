@@ -5,16 +5,18 @@ const mongoose = require("mongoose");
 const MovieRoutes = require("./routes/movie.routes");
 const TheatreRoutes = require("./routes/theatre.routes");
 const AuthRoutes = require("./routes/auth.routes");
+const userRoutes = require("./routes/user.routes");
 
 const app = express();
 
-// body parsing
+// configuring  body parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-MovieRoutes(app);
-TheatreRoutes(app);
-AuthRoutes(app);
+MovieRoutes(app); // invoking movie routes
+TheatreRoutes(app); // invoking theatre routes
+AuthRoutes(app); // invoking auth routes
+userRoutes(app); // invoking user routes
 
 const startServer = async () => {
   try {
