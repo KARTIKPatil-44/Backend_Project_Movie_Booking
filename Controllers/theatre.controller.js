@@ -1,5 +1,6 @@
 const theatreServices = require("../Services/theatre.services");
 const {successResponseBody,errorResponseBody,} = require("../utils/responseBody");
+const {STATUS} = require("../utils/constants");
 
 
 /**
@@ -18,10 +19,10 @@ const createTheatre = async (req, res) => {
     }
     successResponseBody.data = responce;
     successResponseBody.message = "Successfully created the theatre";
-    return res.status(201).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
   } catch (err) {
     errorResponseBody.err = err;
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 };
 
@@ -39,10 +40,10 @@ const destroy = async (req, res) => {
     }
     successResponseBody.data = responce;
     successResponseBody.message = "Successfully deleted the  given theatre";
-    return res.status(201).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
   } catch (error) {
     errorResponseBody.err = error;
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 };
 
@@ -61,10 +62,10 @@ const getTheatre = async (req, res) => {
     successResponseBody.data = responce;
     successResponseBody.message =
       "Successfullfy featched the data  of the theatre";
-    return res.status(201).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
   } catch (error) {
     errorResponseBody.err = error;
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 };
 
@@ -78,10 +79,10 @@ const getTheatres = async (req, res) => {
     const responce = await theatreServices.getAllTheatres();
     successResponseBody.data = responce;
     successResponseBody.message = "Successfully featched all theatres";
-    return res.status(201).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
   } catch (error) {
     errorResponseBody.err = error;
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 };
 
@@ -104,10 +105,10 @@ const update = async (req, res) => {
 
     successResponseBody.data = responce;
     successResponseBody.message = "Successfully updated the theatre";
-    return res.status(200).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
   } catch (error) {
     errorResponseBody.err = error;
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 };
 

@@ -1,4 +1,5 @@
 const Movie = require("../models/movie.model");
+const {STATUS} = require("../utils/constants");
 
 /**
  *
@@ -16,7 +17,7 @@ const createMovie = async (data) => {
         err[key] = error.errors[key].message;
       });
       console.log(err);
-      return { err: err, code: 422 };
+      return { err: err, code: STATUS.UNPROCESSABLE };
     } else {
       throw error;
     }
@@ -34,7 +35,7 @@ const deleteMovie = async (id) => {
     if (!response) {
       return {
         err: "No moive record found for the id provided",
-        code: 404,
+        code: STATUS.NOT_FOUND,
       };
     }
     return response;
@@ -55,7 +56,7 @@ const getMoiveById = async (id) => {
   if (!movie) {
     return {
       err: "No moive found for the corresponding id provided",
-      code: 404,
+      code: STATUS.NOT_FOUND,
     };
   }
   return movie;
@@ -81,7 +82,7 @@ const updateMoive = async (id, data) => {
         err[key] = error.errors[key].message;
       });
       console.log(err);
-      return { err: err, code: 422 };
+      return { err: err, code: STATUS.UNPROCESSABLE };
     } else {
       throw error;
     }
@@ -102,7 +103,7 @@ const fetchMovies = async (filter) => {
   if (!movies || movies.length === 0) {
     return {
       err: "Not able to find the queries movies",
-      code: 404,
+      code: STATUS.NOT_FOUND,
     };
   }
   return movies;

@@ -1,4 +1,5 @@
 const Theatre = require("../models/theatre.model");
+const {STATUS} = require("../utils/constants");
 
 /**
  *
@@ -15,7 +16,7 @@ const createTheatre = async (data) => {
       Object.keys(error.errors).forEach((key) => {
         err[key] = error.errors[key].message;
       });
-      return { err: err, code: 422 };
+      return { err: err, code: STATUS.UNPROCESSABLE };
     } else {
       console.log(err);
       throw error;
@@ -34,7 +35,7 @@ const deleteTheatre = async (id) => {
     if (!response) {
       return {
         err: "No record of a theatre found for the given id",
-        code: 404,
+        code: STATUS.NOT_FOUND,
       };
     }
     return response;
@@ -55,7 +56,7 @@ const getTheatre = async (id) => {
     if (!response) {
       return {
         err: "No theatre found for the given id",
-        code: 404,
+        code: STATUS.NOT_FOUND,
       };
     }
     return response;
@@ -118,7 +119,7 @@ const getAllTheatres = async (data) => {
       if(!response){
         return {
           err: "No theatre found for the given id",
-          code: 404
+          code: STATUS.NOT_FOUND
         }
       }
       return response;
@@ -128,7 +129,7 @@ const getAllTheatres = async (data) => {
         Object.keys(error.errors).forEach((key) =>{
           err[key] = error.errors[key].message;
         });
-        return {err: err, code: 422}
+        return {err: err, code: STATUS.UNPROCESSABLE}
       }
       throw error
     }

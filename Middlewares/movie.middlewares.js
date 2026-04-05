@@ -4,6 +4,7 @@ const badRequestResponse = {
   data: {},
   message: "Malformed Request | Bad Request",
 };
+const {STATUS} = require("../utils/constants");
 
 /**
  *
@@ -17,13 +18,13 @@ const validateMovieCreateRequest = async (req, res, next) => {
   if (!req.body.name) {
     badRequestResponse.err =
       "The name of the movie is not present in the request";
-    return res.status(400).json(badRequestResponse);
+    return res.status(STATUS.BAD_REQUEST).json(badRequestResponse);
   }
   // validate the movie description
   if (!req.body.description) {
     badRequestResponse.err =
       "The name of the description is not present in the request";
-    return res.status(400).json(badRequestResponse);
+    return res.status(STATUS.BAD_REQUEST).json(badRequestResponse);
   }
   // validate the casts
   if (
@@ -33,28 +34,28 @@ const validateMovieCreateRequest = async (req, res, next) => {
   ) {
     badRequestResponse.err =
       "The name of the casts is not present in the request";
-    return res.status(400).json(badRequestResponse);
+    return res.status(STATUS.BAD_REQUEST).json(badRequestResponse);
   }
   // validate the trailerUrl
   if (!req.body.trailerUrl) {
     badRequestResponse.err = "The trailerUrl  is not present in the request";
-    return res.status(400).json(badRequestResponse);
+    return res.status(STATUS.BAD_REQUEST).json(badRequestResponse);
   }
   // validate the language
   if (!req.body.language) {
     badRequestResponse.err = "The  language is not present in the request";
-    return res.status(400).json(badRequestResponse);
+    return res.status(STATUS.BAD_REQUEST).json(badRequestResponse);
   }
   // validate the releaseDate
   if (!req.body.releaseDate) {
     badRequestResponse.err = "The  releaseDate is not present in the request";
-    return res.status(400).json(badRequestResponse);
+    return res.status(STATUS.BAD_REQUEST).json(badRequestResponse);
   }
   // validate the director
   if (!req.body.director) {
     badRequestResponse.err =
       "The name of the director is not present in the request";
-    return res.status(400).json(badRequestResponse);
+    return res.status(STATUS.BAD_REQUEST).json(badRequestResponse);
   }
 
   next();
