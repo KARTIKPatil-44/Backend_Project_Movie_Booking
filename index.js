@@ -13,10 +13,12 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-MovieRoutes(app); // invoking movie routes
-TheatreRoutes(app); // invoking theatre routes
-AuthRoutes(app); // invoking auth routes
-userRoutes(app); // invoking user routes
+mongoose.set('debug', true);
+
+MovieRoutes(app);
+TheatreRoutes(app);
+AuthRoutes(app);
+userRoutes(app);
 
 const startServer = async () => {
   try {

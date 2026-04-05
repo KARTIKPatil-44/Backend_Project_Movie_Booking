@@ -1,10 +1,9 @@
 const Theatre = require("../models/theatre.model");
-const {STATUS} = require("../utils/constants");
+const { STATUS } = require("../utils/constants");
+const Movie = require("../models/movie.model");
 
 /**
- *
- * @param  data -> object containing details of the theatre to be created
- * @returns ->  object with the new theatre
+ * Create Theatre
  */
 const createTheatre = async (data) => {
   try {
@@ -18,16 +17,14 @@ const createTheatre = async (data) => {
       });
       return { err: err, code: STATUS.UNPROCESSABLE };
     } else {
-      console.log(err);
+      console.log(error); // FIXED (err -> error)
       throw error;
     }
   }
 };
 
 /**
- *
- * @param  id -> the unique id using which we can identify the theatre to be deleted
- * @returns -> rturns the deleted theatre
+ * Delete Theatre
  */
 const deleteTheatre = async (id) => {
   try {
@@ -46,9 +43,7 @@ const deleteTheatre = async (id) => {
 };
 
 /**
- *
- * @param id  -> it is the unique _id based on which we will fetch a theater
- *
+ * Get Theatre
  */
 const getTheatre = async (id) => {
   try {
@@ -67,24 +62,19 @@ const getTheatre = async (id) => {
 };
 
 /**
- * @param data -> the data to be used to filter out theatres based on city / pincode
- * @returns -> returns an object with the filtered content of theatres
+ * Get All Theatres
  */
 const getAllTheatres = async (data) => {
   try {
     let query = {};
     let pagination = {};
 
-    if (data && data.city) {
-      query.city = data.city;
-    }
+    if (data && data.city) query.city = data.city;
+    if (data && data.pincode) query.pincode = data.pincode;
+    if (data && data.name) query.name = data.name;
 
-    if (data && data.pincode) {
-      query.pincode = data.pincode;
-    }
-
-    if (data && data.name) {
-      query.name = data.name;
+    if (data && data.movieId) {
+      query.movies = { $all: data.movieId };
     }
 
     if (data && data.limit) {
@@ -98,42 +88,122 @@ const getAllTheatres = async (data) => {
 
     const response = await Theatre.find(query, {}, pagination);
     return response;
-
   } catch (error) {
     console.log(error);
     throw error;
   }
 };
 
+/**
+ * Update Theatre (FIXED structure only)
+ */
+const updateTheatre = async (id, data) => {
+  try {
+    const response = await Theatre.findByIdAndUpdate(id, data, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!response) {
+      return {
+        err: "No theatre found for the given id",
+        code: 404, // keeping your logic
+      };
+    }
+
+    return response;
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      let err = {};
+      Object.keys(error.errors).forEach((key) => {
+        err[key] = error.errors[key].message;
+      });
+      return { err: err, code: STATUS.UNPROCESSABLE };
+    }
+
+    console.log(error);
+    throw error;
+  }
+};
 
 /**
- * @param id -> the unique id to identify the theatre to be updated
- * @param data -> data object to be used to update the theatre
- * @returns -> it returns the new updated theatre object
+ * Update Movies in Theatre
  */
-  const updateTheatre = async (id, data) =>{
-    try{
-      const response = await Theatre.findByIdAndUpdate(id, data, {
-        new : true, runValidators: true
-      });
-      if(!response){
-        return {
-          err: "No theatre found for the given id",
-          code: STATUS.NOT_FOUND
-        }
-      }
-      return response;
-    }catch(error){
-      if(error.name === "ValidationError"){
-        let err = {};
-        Object.keys(error.errors).forEach((key) =>{
-          err[key] = error.errors[key].message;
-        });
-        return {err: err, code: STATUS.UNPROCESSABLE}
-      }
-      throw error
+const updateMoiviesInTheatres = async (theatreId, movieIds, insert) => {
+  try {
+    let theater;
+
+    if (insert) {
+      theater = await Theatre.findByIdAndUpdate(
+        { _id: theatreId },
+        { $addToSet: { movies: { $each: movieIds } } },
+        { new: true }
+      );
+    } else {
+      theater = await Theatre.findByIdAndUpdate(
+        { _id: theatreId },
+        { $pull: { movies: { $in: movieIds } } },
+        { new: true }
+      );
     }
+
+    return theater.populate("movies");
+  } catch (error) {
+    if (error.name === "TypeError") {
+      return {
+        code: 404,
+        err: "No theatre found for the given id",
+      };
+    }
+    console.log(error);
+    throw error;
   }
+};
+
+/**
+ * Get Movies in Theatre
+ */
+const getMoviesInTheatre = async (id) => {
+  try {
+    const theatre = await Theatre.findById(
+      id,
+      { name: 1, movies: 1, address: 1 }
+    ).populate("movies");
+
+    if (!theatre) {
+      return {
+        err: "No theatre with the give id found",
+        code: 404,
+      };
+    }
+
+    return theatre;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+/**
+ * Check Movie in Theatre
+ */
+const checkMovieInTheatre = async (theatreId, movieId) => {
+  try {
+    const responce = await Theatre.findById(theatreId);
+
+    if (!responce) {
+      return {
+        err: "No such theatre found for the given id",
+        code: 404,
+      };
+    }
+
+    return responce.movies.indexOf(movieId) != -1; // logic unchanged
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 
 module.exports = {
   createTheatre,
@@ -141,4 +211,7 @@ module.exports = {
   deleteTheatre,
   getAllTheatres,
   updateTheatre,
+  updateMoiviesInTheatres,
+  getMoviesInTheatre,
+  checkMovieInTheatre,
 };

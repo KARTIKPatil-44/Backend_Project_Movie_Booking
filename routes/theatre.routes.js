@@ -7,7 +7,9 @@ const routes = (app) => {
 
   // CREATE
   app.post(
-    "/mba/api/v1/theatres",theatreMiddlewares.validateTheatreCreateRequest,theatreController.createTheatre,
+    "/mba/api/v1/theatres",
+    theatreMiddlewares.validateTheatreCreateRequest,
+    theatreController.createTheatre,
   );
 
   // DELETE
@@ -22,10 +24,21 @@ const routes = (app) => {
   app.get("/mba/api/v1/theatres", theatreController.getTheatres);
 
   // UPDATE
-  app.patch("/mba/api/v1/theatres/:id",theatreController.update);
+  app.patch("/mba/api/v1/theatres/:id", theatreController.update);
 
   // UPDATE
-  app.put("/mba/api/v1/theatres/:id",theatreController.update);
+  app.put("/mba/api/v1/theatres/:id", theatreController.update);
+
+  // UPDATE
+  app.patch(
+    "/mba/api/v1/theatres/:id/movies",
+    theatreMiddlewares.validateUpateMoviesRequest,
+    theatreController.updateMovies,
+  );
+
+  app.get("/mba/api/v1/theatres/:id/movies",theatreController.getMovies);
+
+  app.get("/mba/api/v1/theatres/:theatreId/movies/:movieId",theatreController.checkMovie);
 };
 
 module.exports = routes;
