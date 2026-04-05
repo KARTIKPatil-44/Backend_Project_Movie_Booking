@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const userServices = require("../Services/user.services");
 const { errorResponseBody } = require("../utils/responseBody");
+const { USER_ROLE } = require("../utils/constants");
 
 /**
  *  validate for user signUp
@@ -72,7 +73,7 @@ const isAuthenticated = async (req, res, next) => {
     req.user = user.id;
     next();
   } catch (error) {
-    if(error.name == "JsonWebTokenError" ){
+    if (error.name == "JsonWebTokenError") {
       errorResponseBody.err = error.message;
       return res.status(401).json(errorResponseBody);
     }
@@ -85,26 +86,65 @@ const isAuthenticated = async (req, res, next) => {
   }
 };
 
-const validateResetPasswordRequest = (req,res, next)=>{
+const validateResetPasswordRequest = (req, res, next) => {
   // validate old password presence
-  if(!req.body.oldPassword){
+  if (!req.body.oldPassword) {
     errorResponseBody.err = "Missing the old password in the request";
     return res.status(400).json(errorResponseBody);
   }
 
   // validate new password presence
-  if(!req.body.newPassword){
+  if (!req.body.newPassword) {
     errorResponseBody.err = "Missing the new password in the request";
     return res.status(400).json(errorResponseBody);
   }
 
   // we can procced
   next();
-}
+};
+
+// validate the user is admin
+const isAdmin = async (req, res, next) => {
+  const user = await userServices.getUserById(req.user);
+  if (user.userRole != USER_ROLE.admin) {
+    errorResponseBody.err =
+      "User is not an admin, cannot be proceed with the request";
+    return res.status(401).json(errorResponseBody);
+  }
+  // we can procced
+  next();
+};
+
+// validate the user is client
+const isClient = async (req, res, next) => {
+  const user = await userServices.getUserById(req.user);
+  if (user.userRole != USER_ROLE.client) {
+    errorResponseBody.err =
+      "User is not a client, cannot be procced with the request";
+    return res.status(401).json(errorResponseBody);
+  }
+  // we can procced
+  next();
+};
+
+const isAdminOrisClient = async (req, res, next) => {
+  const user = await userServices.getUserById(req.user);
+  if (user.userRole != USER_ROLE.admin && user.userRole != USER_ROLE.client) {
+    errorResponseBody.err =
+      "User is neither a client not an admin cannot be procced with the request";
+    return res.status(401).json(errorResponseBody);
+  }
+  next();
+};
 
 module.exports = {
   validateSignUpRequest,
   validateSignInRequest,
   isAuthenticated,
   validateResetPasswordRequest,
+  isAdmin,
+  isClient,
+  isAdminOrisClient,
 };
+
+// 123456789kartik    123456789
