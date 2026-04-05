@@ -1,3 +1,5 @@
+const { errorResponseBody } = require("../utils/responseBody");
+
 const badRequestResponse = {
   success: "false",
   err: "",
@@ -35,6 +37,32 @@ const validateTheatreCreateRequest = async (req, res, next) => {
   next();
 };
 
+  const validateUpateMoviesRequest = async (req, res, next) =>{
+    // validation of insert parameter
+    if(req.body.insert === undefined){
+      errorResponseBody.message = "The insert parameter is missing in the request";
+      return res.status(400).json(errorResponseBody);
+    }
+    // validate movieIds presence
+    if(!req.body.movieIds){
+      errorResponseBody.message = "No movies present in the requst to be updated in theatre";
+      return res.status(400).json(errorResponseBody);
+    }
+    // validate if movieIds is an array or not 
+    if(!(req.body.movieIds instanceof Array)){
+      errorResponseBody.message = "Expected array of movies but found somthing else";
+      return res.status(400).json(errorResponseBody);
+    }
+    // validate if movieIds is empty or not 
+    if(req.body.movieIds.length == 0){
+      errorResponseBody.message = "No movies present in the array provided";
+      return res.status(400).json(errorResponseBody);
+    }
+    // everything is fine
+    next();
+  }
+
 module.exports = {
   validateTheatreCreateRequest,
+  validateUpateMoviesRequest,
 };
