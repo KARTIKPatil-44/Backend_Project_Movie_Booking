@@ -4,10 +4,12 @@ const mongoose = require("mongoose");
 
 const MovieRoutes = require("./routes/movie.routes");
 const TheatreRoutes = require("./routes/theatre.routes");
+const AuthRoutes = require("./routes/auth.routes");
+const userRoutes = require("./routes/user.routes");
 
 const app = express();
 
-// body parsing
+// configuring  body parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -15,6 +17,8 @@ mongoose.set('debug', true);
 
 MovieRoutes(app);
 TheatreRoutes(app);
+AuthRoutes(app);
+userRoutes(app);
 
 const startServer = async () => {
   try {

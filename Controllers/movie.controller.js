@@ -1,5 +1,6 @@
 const movieServices = require("../Services/movie.services");
 const {successResponseBody,errorResponseBody} = require("../utils/responseBody")
+const {STATUS} = require("../utils/constants");
 
 /**
  * 
@@ -17,10 +18,10 @@ const createMovie = async (req, res) => {
     successResponseBody.data = response;
     successResponseBody.message = "Successfully created the movie";
 
-    return res.status(201).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
   } catch (err) {
     console.log(err);
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 };
 
@@ -38,11 +39,11 @@ const deleteMovie = async (req, res) => {
     }
     successResponseBody.data = response;
     successResponseBody.message = "Successfully deleted the movie";
-    return res.status(201).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
 
   } catch (err) {
     console.log(err);
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 };
 
@@ -61,9 +62,9 @@ const getMovie = async (req, res) => {
     }
 
     successResponseBody.data = response;
-    return res.status(200).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
   } catch (err) {
-    return res.status(500).json({
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json({
       success: false,
       error: err,
       message: "Somthing went wrong cannot proccess the request",
@@ -86,11 +87,11 @@ const updateMoive = async(req,res)=>{
       return res.status(response.code).json(errorResponseBody)
     }
     successResponseBody.data = response;
-    return res.status(200).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
   }catch(err){
     console.log(err);
     errorResponseBody.data = err;
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 }
 
@@ -110,12 +111,12 @@ const getMovies = async (req, res) => {
     }
 
     successResponseBody.data = response;
-    return res.status(200).json(successResponseBody);
+    return res.status(STATUS.OK).json(successResponseBody);
 
   } catch (err) {
     console.log(err);
     errorResponseBody.data = err;
-    return res.status(500).json(errorResponseBody);
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 };
 

@@ -1,5 +1,6 @@
 const theatreController = require("../Controllers/theatre.controller");
 const theatreMiddlewares = require("../Middlewares/theatre.middleware");
+const authMiddlewares = require("../Middlewares/auth.middlewares");
 
 const routes = (app) => {
   // routes fucntion takes express app object as parameter
@@ -12,7 +13,9 @@ const routes = (app) => {
   );
 
   // DELETE
-  app.delete("/mba/api/v1/theatres/:id", theatreController.destroy);
+  app.delete("/mba/api/v1/theatres/:id", 
+    authMiddlewares.isAuthenticated,
+    theatreController.destroy);
 
   // READ
   app.get("/mba/api/v1/theatres/:id", theatreController.getTheatre);
