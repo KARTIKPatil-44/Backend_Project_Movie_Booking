@@ -10,17 +10,16 @@ const {STATUS} = require("../utils/constants");
 const createMovie = async (req, res) => {
   try {
     const response = await movieServices.createMovie(req.body);
-    if(response.err){
-      errorResponseBody.err = response.err;
-      errorResponseBody.message = "Validation failed on few parameter of the request body"
-      return res.status(response.code).json(errorResponseBody);
-    }
     successResponseBody.data = response;
     successResponseBody.message = "Successfully created the movie";
-
+    
     return res.status(STATUS.OK).json(successResponseBody);
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+     if(error.err){
+      errorResponseBody.err = error.err;
+      return res.status(error.code).json(errorResponseBody);
+    }
+    errorResponseBody.err = error;
     return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 };

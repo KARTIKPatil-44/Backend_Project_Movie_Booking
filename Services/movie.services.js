@@ -17,7 +17,7 @@ const createMovie = async (data) => {
         err[key] = error.errors[key].message;
       });
       console.log(err);
-      return { err: err, code: STATUS.UNPROCESSABLE };
+      throw { err: err, code: STATUS.UNPROCESSABLE };
     } else {
       throw error;
     }
