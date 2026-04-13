@@ -105,9 +105,9 @@ const updateTheatre = async (id, data) => {
     });
 
     if (!response) {
-      return {
+      throw {
         err: "No theatre found for the given id",
-        code: 404, // keeping your logic
+        code: STATUS.NOT_FOUND, // keeping your logic
       };
     }
 
@@ -118,10 +118,9 @@ const updateTheatre = async (id, data) => {
       Object.keys(error.errors).forEach((key) => {
         err[key] = error.errors[key].message;
       });
-      return { err: err, code: STATUS.UNPROCESSABLE };
+      throw { err: err, code: STATUS.UNPROCESSABLE };
     }
 
-    console.log(error);
     throw error;
   }
 };

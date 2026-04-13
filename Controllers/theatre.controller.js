@@ -100,16 +100,14 @@ const update = async (req, res) => {
       req.params.id,
       req.body,
     );
-
-    if (responce.err) {
-      errorResponseBody.err = responce.err;
-      return res.status(responce.code).json(errorResponseBody);
-    }
-
     successResponseBody.data = responce;
     successResponseBody.message = "Successfully updated the theatre";
     return res.status(STATUS.OK).json(successResponseBody);
   } catch (error) {
+    if (error.err) {
+      errorResponseBody.err = error.err;
+      return res.status(error.code).json(errorResponseBody);
+    }
     errorResponseBody.err = error;
     return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
