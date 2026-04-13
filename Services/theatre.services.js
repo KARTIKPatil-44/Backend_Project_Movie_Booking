@@ -149,8 +149,8 @@ const updateMoiviesInTheatres = async (theatreId, movieIds, insert) => {
     return theater.populate("movies");
   } catch (error) {
     if (error.name === "TypeError") {
-      return {
-        code: 404,
+      throw {
+        code: STATUS.NOT_FOUND,
         err: "No theatre found for the given id",
       };
     }
@@ -170,9 +170,9 @@ const getMoviesInTheatre = async (id) => {
     ).populate("movies");
 
     if (!theatre) {
-      return {
+      throw {
         err: "No theatre with the give id found",
-        code: 404,
+        code: STATUS.NOT_FOUND,
       };
     }
 
@@ -191,9 +191,9 @@ const checkMovieInTheatre = async (theatreId, movieId) => {
     const responce = await Theatre.findById(theatreId);
 
     if (!responce) {
-      return {
+      throw {
         err: "No such theatre found for the given id",
-        code: 404,
+        code: STATUS.NOT_FOUND,
       };
     }
 
