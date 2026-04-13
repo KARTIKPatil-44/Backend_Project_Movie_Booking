@@ -22,15 +22,31 @@ const routes = (app) => {
      movieController.deleteMovie);
 
   // READ
-  app.get("/mba/api/v1/movies/:id", movieController.getMovie);
+  app.get(
+    "/mba/api/v1/movies/:id",
+    movieController.getMovie
+  );
 
   // READ
-  app.put("/mba/api/v1/movies/:id", movieController.updateMoive);
+  app.put(
+    "/mba/api/v1/movies/:id",
+    authMiddlewares.isAuthenticated,
+    authMiddlewares.isAdminOrClient,
+    movieController.updateMoive
+    );
 
   // UPDATE
-  app.patch("/mba/api/v1/movies/:id", movieController.updateMoive);
+  app.patch(
+    "/mba/api/v1/movies/:id",
+    authMiddlewares.isAuthenticated,
+    authMiddlewares.isAdminOrClient,
+    movieController.updateMoive
+    );
 
   // UPDATE
-  app.get("/mba/api/v1/movies", movieController.getMovies);
+  app.get(
+    "/mba/api/v1/movies",
+    movieController.getMovies
+    );
 };
 module.exports = routes;
