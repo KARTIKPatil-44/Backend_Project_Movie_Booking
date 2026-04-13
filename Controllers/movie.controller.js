@@ -54,20 +54,15 @@ const deleteMovie = async (req, res) => {
 const getMovie = async (req, res) => {
   try {
     const response = await movieServices.getMoiveById(req.params.id);
-
-    if (response.err) {
-      errorResponseBody.err = response.err;
-      return res.status(response.code).json(errorResponseBody);
-    }
-
     successResponseBody.data = response;
     return res.status(STATUS.OK).json(successResponseBody);
-  } catch (err) {
-    return res.status(STATUS.INTERNAL_SERVER_ERROR).json({
-      success: false,
-      error: err,
-      message: "Somthing went wrong cannot proccess the request",
-    });
+  } catch (error) {
+    if(error.err){
+      errorResponseBody.err = error.err;
+      return res.status(error.code).json(errorResponseBody);
+    }
+    errorResponseBody.err = error;
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 };
 
@@ -103,17 +98,14 @@ const getMovies = async (req, res) => {
   try {
     const response = await movieServices.fetchMovies(req.query);
 
-    if (response.err) {
-      errorResponseBody.err = response.err;
-      errorResponseBody.message = "The movie does not exist";
-      return res.status(response.code).json(errorResponseBody);
-    }
-
     successResponseBody.data = response;
     return res.status(STATUS.OK).json(successResponseBody);
 
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    if(error.err){
+      errorResponseBody.err = error.err;
+      return res.status(error.code).json(errorResponseBody);
+    }
     errorResponseBody.data = err;
     return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }

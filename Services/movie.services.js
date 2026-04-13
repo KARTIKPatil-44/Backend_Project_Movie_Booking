@@ -54,7 +54,7 @@ const getMoiveById = async (id) => {
   const movie = await Movie.findById(id);
   console.log("moive found", movie);
   if (!movie) {
-    return {
+    throw {
       err: "No moive found for the corresponding id provided",
       code: STATUS.NOT_FOUND,
     };
@@ -101,7 +101,7 @@ const fetchMovies = async (filter) => {
   }
   let movies = await Movie.find(query);
   if (!movies || movies.length === 0) {
-    return {
+    throw {
       err: "Not able to find the queries movies",
       code: STATUS.NOT_FOUND,
     };
