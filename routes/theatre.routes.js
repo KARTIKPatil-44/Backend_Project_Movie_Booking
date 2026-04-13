@@ -15,10 +15,12 @@ const routes = (app) => {
   );
 
   // DELETE
-  app.delete("/mba/api/v1/theatres/:id", 
+  app.delete(
+    "/mba/api/v1/theatres/:id",
     authMiddlewares.isAuthenticated,
     authMiddlewares.isAdminOrClient,
-    theatreController.destroy);
+    theatreController.destroy,
+  );
 
   // READ
   app.get("/mba/api/v1/theatres/:id", theatreController.getTheatre);
@@ -39,9 +41,12 @@ const routes = (app) => {
     theatreController.updateMovies,
   );
 
-  app.get("/mba/api/v1/theatres/:id/movies",theatreController.getMovies);
+  app.get("/mba/api/v1/theatres/:id/movies", theatreController.getMovies);
 
-  app.get("/mba/api/v1/theatres/:theatreId/movies/:movieId",theatreController.checkMovie);
+  app.get(
+    "/mba/api/v1/theatres/:theatreId/movies/:movieId",
+    theatreController.checkMovie,
+  );
 };
 
 module.exports = routes;
