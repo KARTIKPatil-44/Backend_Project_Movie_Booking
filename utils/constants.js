@@ -28,9 +28,9 @@ const BOOKING_STATUS = {
 }
 
 const PAYMENT_STATUS = {
-    pending: PENDING,
-    failed: FAILED,
-    success: SUCCESS
+    pending: "PENDING",
+    failed: "FAILED",
+    success: "SUCCESS"
 }
 
 module.exports = {
