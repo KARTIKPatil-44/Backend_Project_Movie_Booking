@@ -40,6 +40,6 @@ const bookingSchema = new mongoose.Schema({
     }
 }, {timestamps: true});
 
-const Booking = new mongoose.module('Booking', bookingSchema);
+const Booking =  mongoose.module("Booking", bookingSchema);
 
 module.exports = Booking;
