@@ -17,7 +17,7 @@ const createMovie = async (data) => {
         err[key] = error.errors[key].message;
       });
       console.log(err);
-      return { err: err, code: STATUS.UNPROCESSABLE };
+      throw { err: err, code: STATUS.UNPROCESSABLE };
     } else {
       throw error;
     }
@@ -33,7 +33,7 @@ const deleteMovie = async (id) => {
   try {
     const response = await Movie.findByIdAndDelete(id);
     if (!response) {
-      return {
+      throw {
         err: "No moive record found for the id provided",
         code: STATUS.NOT_FOUND,
       };
@@ -54,7 +54,7 @@ const getMoiveById = async (id) => {
   const movie = await Movie.findById(id);
   console.log("moive found", movie);
   if (!movie) {
-    return {
+    throw {
       err: "No moive found for the corresponding id provided",
       code: STATUS.NOT_FOUND,
     };
@@ -82,7 +82,7 @@ const updateMoive = async (id, data) => {
         err[key] = error.errors[key].message;
       });
       console.log(err);
-      return { err: err, code: STATUS.UNPROCESSABLE };
+      throw { err: err, code: STATUS.UNPROCESSABLE };
     } else {
       throw error;
     }
@@ -101,7 +101,7 @@ const fetchMovies = async (filter) => {
   }
   let movies = await Movie.find(query);
   if (!movies || movies.length === 0) {
-    return {
+    throw {
       err: "Not able to find the queries movies",
       code: STATUS.NOT_FOUND,
     };

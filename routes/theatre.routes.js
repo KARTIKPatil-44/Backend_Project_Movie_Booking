@@ -8,14 +8,19 @@ const routes = (app) => {
   // CREATE
   app.post(
     "/mba/api/v1/theatres",
+    authMiddlewares.isAuthenticated,
+    authMiddlewares.isAdminOrClient,
     theatreMiddlewares.validateTheatreCreateRequest,
     theatreController.createTheatre,
   );
 
   // DELETE
-  app.delete("/mba/api/v1/theatres/:id", 
+  app.delete(
+    "/mba/api/v1/theatres/:id",
     authMiddlewares.isAuthenticated,
-    theatreController.destroy);
+    authMiddlewares.isAdminOrClient,
+    theatreController.destroy,
+  );
 
   // READ
   app.get("/mba/api/v1/theatres/:id", theatreController.getTheatre);
@@ -24,10 +29,20 @@ const routes = (app) => {
   app.get("/mba/api/v1/theatres", theatreController.getTheatres);
 
   // UPDATE
-  app.patch("/mba/api/v1/theatres/:id", theatreController.update);
+  app.patch(
+    "/mba/api/v1/theatres/:id", 
+    authMiddlewares.isAuthenticated,
+    authMiddlewares.isAdminOrClient,
+    theatreController.update
+  );
 
   // UPDATE
-  app.put("/mba/api/v1/theatres/:id", theatreController.update);
+  app.put(
+    "/mba/api/v1/theatres/:id",
+    authMiddlewares.isAuthenticated,
+    authMiddlewares.isAdminOrClient,
+     theatreController.update
+    );
 
   // UPDATE
   app.patch(
@@ -36,9 +51,12 @@ const routes = (app) => {
     theatreController.updateMovies,
   );
 
-  app.get("/mba/api/v1/theatres/:id/movies",theatreController.getMovies);
+  app.get("/mba/api/v1/theatres/:id/movies", theatreController.getMovies);
 
-  app.get("/mba/api/v1/theatres/:theatreId/movies/:movieId",theatreController.checkMovie);
+  app.get(
+    "/mba/api/v1/theatres/:theatreId/movies/:movieId",
+    theatreController.checkMovie,
+  );
 };
 
 module.exports = routes;

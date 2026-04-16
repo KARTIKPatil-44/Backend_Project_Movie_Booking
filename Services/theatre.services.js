@@ -30,7 +30,7 @@ const deleteTheatre = async (id) => {
   try {
     const response = await Theatre.findByIdAndDelete(id);
     if (!response) {
-      return {
+      throw {
         err: "No record of a theatre found for the given id",
         code: STATUS.NOT_FOUND,
       };
@@ -49,7 +49,7 @@ const getTheatre = async (id) => {
   try {
     const response = await Theatre.findById(id);
     if (!response) {
-      return {
+      throw {
         err: "No theatre found for the given id",
         code: STATUS.NOT_FOUND,
       };
@@ -105,9 +105,9 @@ const updateTheatre = async (id, data) => {
     });
 
     if (!response) {
-      return {
+      throw {
         err: "No theatre found for the given id",
-        code: 404, // keeping your logic
+        code: STATUS.NOT_FOUND, // keeping your logic
       };
     }
 
@@ -118,10 +118,9 @@ const updateTheatre = async (id, data) => {
       Object.keys(error.errors).forEach((key) => {
         err[key] = error.errors[key].message;
       });
-      return { err: err, code: STATUS.UNPROCESSABLE };
+      throw { err: err, code: STATUS.UNPROCESSABLE };
     }
 
-    console.log(error);
     throw error;
   }
 };
@@ -150,8 +149,8 @@ const updateMoiviesInTheatres = async (theatreId, movieIds, insert) => {
     return theater.populate("movies");
   } catch (error) {
     if (error.name === "TypeError") {
-      return {
-        code: 404,
+      throw {
+        code: STATUS.NOT_FOUND,
         err: "No theatre found for the given id",
       };
     }
@@ -171,9 +170,9 @@ const getMoviesInTheatre = async (id) => {
     ).populate("movies");
 
     if (!theatre) {
-      return {
+      throw {
         err: "No theatre with the give id found",
-        code: 404,
+        code: STATUS.NOT_FOUND,
       };
     }
 
@@ -192,9 +191,9 @@ const checkMovieInTheatre = async (theatreId, movieId) => {
     const responce = await Theatre.findById(theatreId);
 
     if (!responce) {
-      return {
+      throw {
         err: "No such theatre found for the given id",
-        code: 404,
+        code: STATUS.NOT_FOUND,
       };
     }
 
