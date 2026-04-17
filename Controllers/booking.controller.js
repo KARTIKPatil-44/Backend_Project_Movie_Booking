@@ -4,9 +4,9 @@ const {STATUS} = require("../utils/constants");
 
 const create = async(req,res)=>{
     try{
-        let userId = req.userId;
+        let userId = req.user;
         const responce = await bookingServices.createBooking({...req.body, userId: userId});
-        successResponseBody.message = "Succeessfully  created a booking";
+        successResponseBody.message = "Successfully  created a booking";
         successResponseBody.data = responce;
         return res.status(STATUS.OK).json(successResponseBody);
     }catch(error){

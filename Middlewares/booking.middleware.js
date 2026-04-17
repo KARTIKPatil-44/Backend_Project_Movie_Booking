@@ -25,7 +25,7 @@ const validateBookingCreateRequest = async(req , res, next)=>{
 
     // validate movie presence
     if(!req.body.movieId){
-        errorResponseBody.err = "No moive id present";
+        errorResponseBody.err = "No movie id present";
         return res.status(STATUS.BAD_REQUEST).json(errorResponseBody);
     }
 
