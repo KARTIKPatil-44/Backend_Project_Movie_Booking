@@ -57,12 +57,7 @@ The server will start on the configured port (default: 3000).
 
 Create a `.env` file in the root directory with the following variables:
 
-```
-PORT=3000
-DB_NAME=mba_db
-DB_URL=mongodb://localhost/mba_db
-AUTH_KEY=moviebookingkey
-```
+
 
 - `PORT`: Server port (default: 3000)
 - `DB_NAME`: MongoDB database name
