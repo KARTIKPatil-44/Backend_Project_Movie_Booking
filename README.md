@@ -289,4 +289,4 @@ Have questions or suggestions? Feel free to reach out!
 
 If you like this project, don't forget to ⭐ the repo.
 
-Built with ❤️ by the development team.
+Built with ❤️.
