@@ -17,7 +17,7 @@ const bookingSchema = new mongoose.Schema({
         required: true,
         ref: "User"
     },
-    timings: {
+    timing: {
         type: String,
         required: true
     },
@@ -33,13 +33,13 @@ const bookingSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum:{
-            value: [BOOKING_STATUS.processing, BOOKING_STATUS.cancelled, BOOKING_STATUS.SUCCESSFULL],
+            values: [BOOKING_STATUS.PROCESSING, BOOKING_STATUS.CANCELLED, BOOKING_STATUS.SUCCESSFUL],
             message: "Invalid booking status"
         },
-        default: BOOKING_STATUS.processing
+        default: BOOKING_STATUS.PROCESSING
     }
 }, {timestamps: true});
 
-const Booking =  mongoose.module("Booking", bookingSchema);
+const Booking =  mongoose.model("Booking", bookingSchema);
 
 module.exports = Booking;

@@ -22,10 +22,10 @@ const STATUS_CODES = {
 }
 
 const BOOKING_STATUS = {
-    processing: "IN_PROCCESS",
-    cancelled: "CANCELLED",
-    successfull: "SUCCESSFULL"
-}
+    PROCESSING: "PROCESSING",
+    CANCELLED: "CANCELLED",
+    SUCCESSFUL: "SUCCESSFUL"
+};
 
 const PAYMENT_STATUS = {
     pending: "PENDING",
