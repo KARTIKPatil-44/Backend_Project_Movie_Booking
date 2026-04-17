@@ -283,6 +283,10 @@ Backend_MovieBooking_Project/
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Contact
+## Support
 
-For questions or support, please contact the development team.
+Have questions or suggestions? Feel free to reach out!
+
+If you like this project, don't forget to ⭐ the repo.
+
+Built with ❤️ by the development team.
