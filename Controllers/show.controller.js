@@ -1,4 +1,4 @@
-const showService = require("../Services/showservice");
+const showService = require("../Services/show.service");
 const {successResponseBody,errorResponseBody} = require("../utils/responseBody");
 const {STATUS} = require("../utils/constants");
 

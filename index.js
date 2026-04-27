@@ -8,6 +8,7 @@ const AuthRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
 const BookingRouts = require("./routes/booking.route");
 const ShowRoutes = require("./routes/show.routes");
+const PaymentRoutes = require("./routes/payment.routes");
 
 const app = express();
 
@@ -23,6 +24,7 @@ AuthRoutes(app);
 userRoutes(app);
 BookingRouts(app);
 ShowRoutes(app);
+PaymentRoutes(app);
 
 const startServer = async () => {
   try {
