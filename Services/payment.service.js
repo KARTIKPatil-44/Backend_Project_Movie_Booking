@@ -19,9 +19,9 @@ const createPayment = async (data) => {
     let currentTime = Date.now();
 
     // calculate how many minutes are remaning
-    let minutes = Math.floor((currentTime - bookingTime) / 100 / 60);
+    let minutes = Math.floor((currentTime - bookingTime) / 1000 / 60);
     if (minutes > 5) {
-      booking.status = BOOKING_STATUS.EXPRIED;
+      booking.status = BOOKING_STATUS.EXPIRED;
       await booking.save();
       return booking;
     }
@@ -30,18 +30,20 @@ const createPayment = async (data) => {
       bookingId: data.bookingId,
       amount: data.amount,
     });
-    if (payment.amount > booking.totalCost) {
+    if (payment.amount != booking.totalCost) {
       payment.status = PAYMENT_STATUS.failed;
     }
 
-    if (!payment || payment.status == PAYMENT_STATUS.failed) {
+    if (!payment ||  payment.status == PAYMENT_STATUS.failed) {
       booking.status = BOOKING_STATUS.CANCELLED;
       await booking.save();
+      await payment.save();
       return booking;
     }
     payment.status = PAYMENT_STATUS.success;
     booking.status = BOOKING_STATUS.SUCCESSFUL;
     await booking.save();
+    await payment.save();
     return booking;
   } catch (error) {
     throw error;

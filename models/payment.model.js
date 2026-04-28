@@ -19,7 +19,7 @@ const paymentSchema = new mongoose.Schema({
         },
         default: PAYMENT_STATUS.pending
     }
-}, {timeseries: true});
+}, {timestamps: true});
 
 const payment = mongoose.model("Payment", paymentSchema);
 

@@ -8,7 +8,7 @@ const {
 const create = async (req, res) => {
     try {
         const responce = await paymentService.createPayment(req.body);
-        if(responce.STATUS == BOOKING_STATUS.EXPRIED){
+        if(responce.status == BOOKING_STATUS.EXPIRED){
             errorResponseBody.err = "The payment took more than 5 minutes to get processed, hence you booking got expired, please try again";
             errorResponseBody.data = responce;
             return res.status(STATUS.GONE).json(errorResponseBody);
@@ -18,7 +18,7 @@ const create = async (req, res) => {
             errorResponseBody.data = responce;
             return res.status(STATUS.PAYMENT_REQUIRED).json(errorResponseBody);
         }
-        successResponseBody.data = response;
+        successResponseBody.data = responce;
         successResponseBody.message = "Booking completed successfully";
         return res.status(STATUS.OK).json(successResponseBody);
         
