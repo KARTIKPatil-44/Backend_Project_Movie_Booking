@@ -37,7 +37,8 @@ const getPaymentDetailsById = async (req, res) => {
   try {
     const responce = await paymentService.getPaymentById(req.params.id);
     successResponseBody.data = responce;
-    successResponseBody.message = "Successfully fetched the booking and payment details";
+    successResponseBody.message =
+      "Successfully fetched the booking and payment details";
     return res.status(STATUS.OK).json(successResponseBody);
   } catch (error) {
     if (error.err) {
@@ -49,7 +50,20 @@ const getPaymentDetailsById = async (req, res) => {
   }
 };
 
+const getAllPayments = async (req, res) => {
+  try {
+    const response = await paymentService.getAllPayments(req.user);
+    // console.log(response);
+    successResponseBody.data = response;
+    successResponseBody.message = "Successfully fetched all the payments";
+    return res.status(STATUS.OK).json(successResponseBody);
+  } catch (error) {
+    errorResponseBody.err = error;
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
+  }
+};
 module.exports = {
   create,
-  getPaymentDetailsById
+  getPaymentDetailsById,
+  getAllPayments,
 };
