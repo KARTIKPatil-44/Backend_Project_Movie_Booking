@@ -80,9 +80,11 @@ const getAllPayments = async (userId) => {
         if(user.userRole != USER_ROLE.admin) {
             filter.userId = user.id;
         }
+    
         const bookings = await Booking.find(filter, 'id');
 
         const payments = await Payment.find({booking: {$in: bookings}});
+        console.log(payments);
         return payments;
     } catch (error) {
         throw error;
