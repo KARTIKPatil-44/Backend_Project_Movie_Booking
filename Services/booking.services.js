@@ -1,9 +1,17 @@
 const Booking = require("../models/booking.model");
+const Show = require("../models/show.model");
 const { STATUS } = require("../utils/constants");
 
 const createBooking = async (data) => {
   try {
+    const show = await Show.findOne({
+      movieId: data.movieId,
+      theatreId: data.theatreId,
+      timing: data.timing,
+    });
+    data.totalCost = data.noOfSeats * show.price;
     const responce = await Booking.create(data);
+    await show.save();
     return responce;
   } catch (error) {
     console.log(error);
@@ -44,49 +52,47 @@ const updateBooking = async (data, bookingId) => {
   }
 };
 
-const getBookings = async(data)=>{
-  try{
+const getBookings = async (data) => {
+  try {
     const responce = await Booking.find({
-      userId: data.userId
+      userId: data.userId,
     });
     return responce;
-
-  }catch(error){
+  } catch (error) {
     throw error;
   }
-}
+};
 
-const getAllBookings = async()=>{
-  try{
+const getAllBookings = async () => {
+  try {
     const responce = await Booking.find();
     return responce;
-
-  }catch(error){
+  } catch (error) {
     throw error;
   }
-}
+};
 
-const getBookingById = async(id, userId) =>{
-  try{
+const getBookingById = async (id, userId) => {
+  try {
     const responce = await Booking.findById(id);
-    if(!responce){
+    if (!responce) {
       throw {
         err: "No booking records found for the id",
-        code: STATUS.NOT_FOUND
-      }
+        code: STATUS.NOT_FOUND,
+      };
     }
-    if(responce.userId != userId){
+    if (responce.userId != userId) {
       throw {
         err: "Not able to access the booking",
-        code: STATUS.UNAUTHORISED
-      }
+        code: STATUS.UNAUTHORISED,
+      };
     }
     return responce;
-  }catch(error){
+  } catch (error) {
     console.log(error);
     throw error;
   }
-}
+};
 
 module.exports = {
   createBooking,

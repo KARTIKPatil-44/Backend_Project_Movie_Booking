@@ -16,7 +16,7 @@ const create = async (req, res) => {
     }
     if (responce.status == BOOKING_STATUS.CANCELLED) {
       errorResponseBody.err =
-        "he payment failed due to some reason, booking was not successfull, please try again";
+        "The payment failed due to some reason, booking was not successfull, please try again";
       errorResponseBody.data = responce;
       return res.status(STATUS.PAYMENT_REQUIRED).json(errorResponseBody);
     }
