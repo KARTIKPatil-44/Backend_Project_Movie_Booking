@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema(
 
     userRole: {
       type: String,
-      require: true,
+      required: true,
       enum: {
         values: [USER_ROLE.customer, USER_ROLE.admin, USER_ROLE.client],
         message: "Invalid user role given",
@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema(
 
     userStatus: {
       type: String,
-      require:true,
+      required:true,
       enum: {
         values: [USER_STATUS.approved, USER_STATUS.pending, USER_STATUS.rejected],
         message: "Invalid status for user given",

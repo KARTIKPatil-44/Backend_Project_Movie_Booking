@@ -18,11 +18,28 @@ const STATUS_CODES = {
     NOT_FOUND: 404,
     BAD_REQUEST: 400 ,
     FORBIDDEN: 403,
-    UNPROCESSABLE: 422
+    UNPROCESSABLE: 422,
+    GONE: 410,
+    PAYMENT_REQUIRED: 402
+}
+
+const BOOKING_STATUS = {
+    PROCESSING: "IN_PROCESS",
+    CANCELLED: "CANCELLED",
+    SUCCESSFUL: "SUCCESSFUL",
+    EXPIRED: "EXPIRED"
+};
+
+const PAYMENT_STATUS = {
+    pending: "PENDING",
+    failed: "FAILED",
+    success: "SUCCESS"
 }
 
 module.exports = {
     USER_ROLE,
     USER_STATUS,
     STATUS: STATUS_CODES,
+    BOOKING_STATUS,
+    PAYMENT_STATUS,
 }
