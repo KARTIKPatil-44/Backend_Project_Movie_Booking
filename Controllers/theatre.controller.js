@@ -12,7 +12,7 @@ const { STATUS } = require("../utils/constants");
  */
 const createTheatre = async (req, res) => {
   try {
-    const responce = await theatreServices.createTheatre(req.body);
+    const responce = await theatreServices.createTheatre({...req.body, owner: req.user});
     if (responce.err) {
       errorResponseBody.err = responce.err;
       errorResponseBody.message =
