@@ -4,6 +4,7 @@ const {
   errorResponseBody,
 } = require("../utils/responseBody");
 const { STATUS } = require("../utils/constants");
+const SendMail = require ("../Services/email.service");
 
 /**
  *
@@ -12,15 +13,14 @@ const { STATUS } = require("../utils/constants");
  */
 const createTheatre = async (req, res) => {
   try {
-    const responce = await theatreServices.createTheatre(req.body);
-    if (responce.err) {
-      errorResponseBody.err = responce.err;
-      errorResponseBody.message =
-        "Validation failed on few parameters of the request body";
-      return res.status(responce.code).json(errorResponseBody);
-    }
+    const responce = await theatreServices.createTheatre({...req.body, owner: req.user});
     successResponseBody.data = responce;
-    successResponseBody.message = "Successfully created the theatre";
+    successResponseBody.message = "Successfullfy created the Theatre";
+    SendMail(
+      "successfully created Theater",
+      req.user,
+      "You have successfully created a new Theater"
+    );
     return res.status(STATUS.OK).json(successResponseBody);
   } catch (err) {
     errorResponseBody.err = err;
