@@ -26,16 +26,23 @@ BookingRouts(app);
 ShowRoutes(app);
 PaymentRoutes(app);
 
+
 const startServer = async () => {
   try {
-    await mongoose.connect(process.env.DB_URL);
-    console.log("Successfully connected to mongodb");
+    if (process.env.NODE_ENV === "production") {
+      await mongoose.connect(process.env.PROD_DB_URL);
+    } else {
+      await mongoose.connect(process.env.DB_URL);
+    }
+
+    console.log("Successfully connected to MongoDB");
 
     app.listen(process.env.PORT, () => {
-      console.log(`Server started on Port ${process.env.PORT}`);
+      console.log(`Server started on Port ${process.env.PORT}!!`);
     });
+
   } catch (err) {
-    console.log("Not able to connect to mongodb", err);
+    console.error("Not able to connect MongoDB:", err);
   }
 };
 
