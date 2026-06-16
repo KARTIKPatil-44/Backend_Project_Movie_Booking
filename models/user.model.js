@@ -47,14 +47,22 @@ const userSchema = new mongoose.Schema(
       },
       default: USER_STATUS.approved
     },
+    resetOtp: {
+      type: String
+    },
+    resetOtpExpires: {
+      type: Date
+    }
   },
   { timestamps: true },
 );
-userSchema.pre("save", async function (/**next */) {
-  // a trigger to encrypt the plain password befor saving the user
+userSchema.pre("save", async function () {
+  // a trigger to encrypt the plain password before saving the user
+  if (!this.isModified("password")) {
+    return;
+  }
   const hash = await bcrypt.hash(this.password, 10);
   this.password = hash;
-  //next()
 });
 
 /**

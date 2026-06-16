@@ -15,6 +15,11 @@ const routes = (app) =>{
         showController.getShows
     );
 
+    app.get(
+        "/mba/api/v1/shows/:id",
+        showController.getShowById
+    );
+
     app.delete(
         "/mba/api/v1/shows/:id",
         authMiddleware.isAuthenticated,

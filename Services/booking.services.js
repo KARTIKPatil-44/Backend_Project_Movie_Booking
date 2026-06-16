@@ -56,7 +56,7 @@ const getBookings = async (data) => {
   try {
     const responce = await Booking.find({
       userId: data.userId,
-    });
+    }).populate("movieId").populate("theatreId");
     return responce;
   } catch (error) {
     throw error;
@@ -65,7 +65,7 @@ const getBookings = async (data) => {
 
 const getAllBookings = async () => {
   try {
-    const responce = await Booking.find();
+    const responce = await Booking.find().populate("movieId").populate("theatreId");
     return responce;
   } catch (error) {
     throw error;
@@ -74,7 +74,7 @@ const getAllBookings = async () => {
 
 const getBookingById = async (id, userId) => {
   try {
-    const responce = await Booking.findById(id);
+    const responce = await Booking.findById(id).populate("movieId").populate("theatreId");
     if (!responce) {
       throw {
         err: "No booking records found for the id",

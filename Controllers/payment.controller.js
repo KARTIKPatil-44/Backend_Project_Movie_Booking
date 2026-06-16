@@ -30,10 +30,11 @@ const create = async (req, res) => {
     successResponseBody.data = responce;
     successResponseBody.message = "Booking completed successfully";
     console.log(responce, process.env.NOTI_SERVICE);
+     const seatDetails = responce.seats && responce.seats.length > 0 ? ` (Seats: ${responce.seats.join(', ')})` : '';
      await SendMail(
       "Your booking is successfully",
        responce.userId,
-      `Your booking for ${movie.name} in ${theatre.name} for ${responce.noOfSeats} seats on ${responce.timing} is successfull. Your booking id is ${responce.id}`,
+      `Your booking for ${movie.name} in ${theatre.name} for ${responce.noOfSeats} seats${seatDetails} on ${responce.timing} is successfull. Your booking id is ${responce.id}`,
     );
     return res.status(STATUS.OK).json(successResponseBody);
   } catch (error) {
@@ -41,7 +42,7 @@ const create = async (req, res) => {
       errorResponseBody.err = error.err;
       return res.status(error.code).json(errorResponseBody);
     }
-    errorResponseBody.err = error.err;
+    errorResponseBody.err = error.message || error;
     return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 };
@@ -58,7 +59,7 @@ const getPaymentDetailsById = async (req, res) => {
       errorResponseBody.err = error.err;
       return res.status(error.code).json(errorResponseBody);
     }
-    errorResponseBody.err = error.err;
+    errorResponseBody.err = error.message || error;
     return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 };

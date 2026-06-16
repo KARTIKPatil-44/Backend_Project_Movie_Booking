@@ -20,6 +20,21 @@ const routes = (app) =>{
         authMiddleware.validateResetPasswordRequest,
         authController.resetPassword
     );
+
+    app.post(
+        "/mba/api/v1/auth/forgot",
+        authController.forgotPassword
+    );
+
+    app.post(
+        "/mba/api/v1/auth/reset-password",
+        authController.resetForgotPassword
+    );
+
+    app.post(
+        "/mba/api/v1/auth/social",
+        authController.socialSignIn
+    );
 }
 
 module.exports = routes;

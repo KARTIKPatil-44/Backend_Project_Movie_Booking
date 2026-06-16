@@ -28,7 +28,7 @@ const routes = (app)=>{
     app.get(
         "/mba/api/v1/bookings/all",
         authMiddleware.isAuthenticated,
-        authMiddleware.isAdmin,
+        authMiddleware.isAdminOrClient,
         bookingController.getAllBookings
     );
 

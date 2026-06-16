@@ -66,6 +66,7 @@ const canChangeStatus  = async(req,res,next)=>{
         errorResponseBody.err = "You are not allowed to change the booking status";
         return res.status(STATUS.UNAUTHORISED).json(errorResponseBody);
     }
+    next();
 }
 
 module.exports = {

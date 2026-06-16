@@ -9,7 +9,7 @@ const routes = (app) => {
   app.post(
     "/mba/api/v1/movies",
     authMiddlewares.isAuthenticated,
-    authMiddlewares.isAdminOrClient,
+    authMiddlewares.isAdmin,
     movieMiddlewares.validateMovieCreateRequest,
     movieController.createMovie,
   );
@@ -18,7 +18,7 @@ const routes = (app) => {
   app.delete(
     "/mba/api/v1/movies/:id",
     authMiddlewares.isAuthenticated,
-    authMiddlewares.isAdminOrClient,
+    authMiddlewares.isAdmin,
      movieController.deleteMovie);
 
   // READ
@@ -31,7 +31,7 @@ const routes = (app) => {
   app.put(
     "/mba/api/v1/movies/:id",
     authMiddlewares.isAuthenticated,
-    authMiddlewares.isAdminOrClient,
+    authMiddlewares.isAdmin,
     movieController.updateMoive
     );
 
@@ -39,7 +39,7 @@ const routes = (app) => {
   app.patch(
     "/mba/api/v1/movies/:id",
     authMiddlewares.isAuthenticated,
-    authMiddlewares.isAdminOrClient,
+    authMiddlewares.isAdmin,
     movieController.updateMoive
     );
 
@@ -48,5 +48,17 @@ const routes = (app) => {
     "/mba/api/v1/movies",
     movieController.getMovies
     );
+
+  // REVIEWS
+  app.post(
+    "/mba/api/v1/movies/:id/reviews",
+    authMiddlewares.isAuthenticated,
+    movieController.addReview
+  );
+
+  app.get(
+    "/mba/api/v1/movies/:id/reviews",
+    movieController.getReviews
+  );
 };
 module.exports = routes;

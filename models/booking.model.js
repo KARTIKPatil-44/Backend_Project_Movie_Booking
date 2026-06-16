@@ -25,6 +25,10 @@ const bookingSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    seats: {
+        type: [String],
+        default: []
+    },
     totalCost: {
         type: Number,
         required: true

@@ -5,6 +5,8 @@ const {
 } = require("../utils/responseBody");
 const { STATUS } = require("../utils/constants");
 const SendMail = require ("../Services/email.service");
+const Theatre = require("../models/theatre.model");
+const User = require("../models/user.model");
 
 /**
  *
@@ -35,6 +37,18 @@ const createTheatre = async (req, res) => {
  */
 const destroy = async (req, res) => {
   try {
+    const user = await User.findById(req.user);
+    if (!user) {
+      errorResponseBody.err = "User not found";
+      return res.status(STATUS.NOT_FOUND).json(errorResponseBody);
+    }
+    if (user.userRole === "CLIENT") {
+      const theatre = await Theatre.findById(req.params.id);
+      if (theatre && theatre.owner.toString() !== req.user) {
+        errorResponseBody.err = "You are not authorized to delete this theatre";
+        return res.status(STATUS.FORBIDDEN).json(errorResponseBody);
+      }
+    }
     const responce = await theatreServices.deleteTheatre(req.params.id);
     successResponseBody.data = responce;
     successResponseBody.message = "Successfully deleted the  given theatre";
@@ -96,6 +110,18 @@ const getTheatres = async (req, res) => {
  */
 const update = async (req, res) => {
   try {
+    const user = await User.findById(req.user);
+    if (!user) {
+      errorResponseBody.err = "User not found";
+      return res.status(STATUS.NOT_FOUND).json(errorResponseBody);
+    }
+    if (user.userRole === "CLIENT") {
+      const theatre = await Theatre.findById(req.params.id);
+      if (theatre && theatre.owner.toString() !== req.user) {
+        errorResponseBody.err = "You are not authorized to update this theatre";
+        return res.status(STATUS.FORBIDDEN).json(errorResponseBody);
+      }
+    }
     const responce = await theatreServices.updateTheatre(
       req.params.id,
       req.body,
@@ -115,6 +141,18 @@ const update = async (req, res) => {
 
 const updateMovies = async (req, res) => {
   try {
+    const user = await User.findById(req.user);
+    if (!user) {
+      errorResponseBody.err = "User not found";
+      return res.status(STATUS.NOT_FOUND).json(errorResponseBody);
+    }
+    if (user.userRole === "CLIENT") {
+      const theatre = await Theatre.findById(req.params.id);
+      if (theatre && theatre.owner.toString() !== req.user) {
+        errorResponseBody.err = "You are not authorized to update movies in this theatre";
+        return res.status(STATUS.FORBIDDEN).json(errorResponseBody);
+      }
+    }
     const responce = await theatreServices.updateMoiviesInTheatres(
       req.params.id,
       req.body.movieIds,

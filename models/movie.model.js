@@ -41,6 +41,18 @@ const movieSchema = new mongoose.Schema(
       required: true,
       default: "RELEASED",
     },
+    imageUrl: {
+      type: String,
+    },
+    genre: {
+      type: String,
+    },
+    rating: {
+      type: Number,
+    },
+    duration: {
+      type: String,
+    },
   },
   { timestamps: true },
 );

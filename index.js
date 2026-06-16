@@ -1,6 +1,7 @@
 const express = require("express");
 require("dotenv").config({ quiet: true });
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const MovieRoutes = require("./routes/movie.routes");
 const TheatreRoutes = require("./routes/theatre.routes");
@@ -12,9 +13,12 @@ const PaymentRoutes = require("./routes/payment.routes");
 
 const app = express();
 
+// configuring CORS
+app.use(cors());
+
 // configuring  body parsing
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
+app.use(express.json({ limit: "50mb" }));
 
 mongoose.set('debug', true);
 

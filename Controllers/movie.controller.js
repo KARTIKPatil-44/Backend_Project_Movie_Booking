@@ -109,10 +109,57 @@ const getMovies = async (req, res) => {
 };
 
 
+const Review = require("../models/review.model");
+const User = require("../models/user.model");
+
+const addReview = async (req, res) => {
+  try {
+    const user = await User.findById(req.user);
+    if (!user) {
+      errorResponseBody.err = "User not found";
+      return res.status(STATUS.NOT_FOUND).json(errorResponseBody);
+    }
+    
+    const { rating, text } = req.body;
+    const movieId = req.params.id;
+    
+    const review = await Review.create({
+      movieId,
+      userId: req.user,
+      userName: user.name || user.email.split('@')[0],
+      rating: Number(rating),
+      text,
+    });
+    
+    successResponseBody.data = review;
+    successResponseBody.message = "Successfully created the review";
+    return res.status(STATUS.OK).json(successResponseBody);
+  } catch (error) {
+    errorResponseBody.err = error.message || error;
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
+  }
+};
+
+const getReviews = async (req, res) => {
+  try {
+    const movieId = req.params.id;
+    const reviews = await Review.find({ movieId }).sort({ createdAt: -1 });
+    
+    successResponseBody.data = reviews;
+    successResponseBody.message = "Successfully fetched the movie reviews";
+    return res.status(STATUS.OK).json(successResponseBody);
+  } catch (error) {
+    errorResponseBody.err = error.message || error;
+    return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
+  }
+};
+
 module.exports = {
   createMovie,
   deleteMovie,
   getMovie,
   updateMoive,
   getMovies,
+  addReview,
+  getReviews,
 };

@@ -1,6 +1,7 @@
 const Show = require("../models/show.model");
 const Theatre = require("../models/theatre.model");
-const {STATUS} = require("../utils/constants");
+const Booking = require("../models/booking.model");
+const {STATUS, BOOKING_STATUS} = require("../utils/constants");
 
 
 const createShow = async (data) =>{
@@ -12,7 +13,7 @@ const createShow = async (data) =>{
                 code: STATUS.NOT_FOUND
             }
         }
-        if(theatre.movies.indexOf(data.movieId) == -1){
+        if (!theatre.movies.some(id => id.toString() === data.movieId.toString())) {
             throw {
                 err: "Movie is currently not available in the requested theatre",
                 code: STATUS.NOT_FOUND
@@ -99,9 +100,47 @@ const updateShow = async(id, data)=>{
         throw error;
     }
 }
+
+const getShowById = async (id) => {
+    try {
+        const response = await Show.findById(id);
+        if (!response) {
+            throw {
+                err: "No show found for the given id",
+                code: STATUS.NOT_FOUND
+            };
+        }
+        
+        // Find bookings for this show
+        const bookings = await Booking.find({
+            theatreId: response.theatreId,
+            movieId: response.movieId,
+            timing: response.timing,
+            status: { $in: [BOOKING_STATUS.SUCCESSFUL, BOOKING_STATUS.PROCESSING] }
+        });
+
+        // Collect all booked seats
+        let bookedSeats = [];
+        bookings.forEach(b => {
+            if (b.seats && Array.isArray(b.seats)) {
+                bookedSeats = bookedSeats.concat(b.seats);
+            }
+        });
+
+        // Convert Mongoose document to plain object so we can add properties
+        const showObj = response.toObject();
+        showObj.bookedSeats = bookedSeats;
+
+        return showObj;
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     createShow,
     getShows,
     deleteShow,
     updateShow,
+    getShowById,
 }

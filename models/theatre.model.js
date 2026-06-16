@@ -37,6 +37,6 @@ const theatreSchema = mongoose.Schema(
   { timestamps: true },
 );
 
-const Theatre = mongoose.model("Theater", theatreSchema);
+const Theatre = mongoose.model("Theatre", theatreSchema, "theaters");
 
 module.exports = Theatre;

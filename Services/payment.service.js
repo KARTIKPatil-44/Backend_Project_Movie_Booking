@@ -12,20 +12,26 @@ const {
 const createPayment = async (data) => {
   try {
     const booking = await Booking.findById(data.bookingId);
-    const show = await Show.findOne({
-      movieId: booking.movieId,
-      theatreId: booking.theatreId,
-      timing: booking.timing
-    });
+    if (!booking) {
+      throw {
+        err: "No booking found",
+        code: STATUS.NOT_FOUND,
+      };
+    }
     if (booking.status == BOOKING_STATUS.SUCCESSFUL) {
       throw {
         err: "Booking already done, cannot make a new payment against it",
         code: STATUS.FORBIDDEN,
       };
     }
-    if (!booking) {
+    const show = await Show.findOne({
+      movieId: booking.movieId,
+      theatreId: booking.theatreId,
+      timing: booking.timing
+    });
+    if (!show) {
       throw {
-        err: "No booking found",
+        err: "No showtime found matching this booking",
         code: STATUS.NOT_FOUND,
       };
     }

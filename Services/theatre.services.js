@@ -197,7 +197,7 @@ const checkMovieInTheatre = async (theatreId, movieId) => {
       };
     }
 
-    return responce.movies.indexOf(movieId) != -1; // logic unchanged
+    return responce.movies.some(id => id.toString() === movieId.toString());
   } catch (error) {
     console.log(error);
     throw error;
