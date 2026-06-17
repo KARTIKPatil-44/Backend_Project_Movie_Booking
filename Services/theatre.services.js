@@ -11,11 +11,10 @@ const createTheatre = async (data) => {
     return response;
   } catch (error) {
     if (error.name === "ValidationError") {
-      let err = {};
-      Object.keys(error.errors).forEach((key) => {
-        err[key] = error.errors[key].message;
-      });
-      throw { err: err, code: STATUS.UNPROCESSABLE };
+      let errMessages = Object.keys(error.errors)
+        .map((key) => error.errors[key].message)
+        .join(" | ");
+      throw { err: errMessages, code: STATUS.UNPROCESSABLE };
     } else {
       console.log(error); // FIXED (err -> error)
       throw error;
@@ -114,11 +113,10 @@ const updateTheatre = async (id, data) => {
     return response;
   } catch (error) {
     if (error.name === "ValidationError") {
-      let err = {};
-      Object.keys(error.errors).forEach((key) => {
-        err[key] = error.errors[key].message;
-      });
-      throw { err: err, code: STATUS.UNPROCESSABLE };
+      let errMessages = Object.keys(error.errors)
+        .map((key) => error.errors[key].message)
+        .join(" | ");
+      throw { err: errMessages, code: STATUS.UNPROCESSABLE };
     }
 
     throw error;

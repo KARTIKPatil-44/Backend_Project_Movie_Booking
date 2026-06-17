@@ -12,12 +12,10 @@ const createMovie = async (data) => {
     return movie;
   } catch (error) {
     if (error.name === "ValidationError") {
-      let err = {};
-      Object.keys(error.errors).forEach((key) => {
-        err[key] = error.errors[key].message;
-      });
-      console.log(err);
-      throw { err: err, code: STATUS.UNPROCESSABLE };
+      let errMessages = Object.keys(error.errors)
+        .map((key) => error.errors[key].message)
+        .join(" | ");
+      throw { err: errMessages, code: STATUS.UNPROCESSABLE };
     } else {
       throw error;
     }
@@ -77,12 +75,10 @@ const updateMoive = async (id, data) => {
     return moive;
   } catch (error) {
     if (error.name === "ValidationError") {
-      let err = {};
-      Object.keys(error.errors).forEach((key) => {
-        err[key] = error.errors[key].message;
-      });
-      console.log(err);
-      throw { err: err, code: STATUS.UNPROCESSABLE };
+      let errMessages = Object.keys(error.errors)
+        .map((key) => error.errors[key].message)
+        .join(" | ");
+      throw { err: errMessages, code: STATUS.UNPROCESSABLE };
     } else {
       throw error;
     }

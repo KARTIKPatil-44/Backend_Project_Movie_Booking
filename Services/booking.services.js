@@ -16,11 +16,10 @@ const createBooking = async (data) => {
   } catch (error) {
     console.log(error);
     if (error.name == "ValidationError") {
-      let err = {};
-      Object.keys(error.errors).forEach((key) => {
-        err[key] = error.errors[key].message;
-      });
-      throw { err: err, code: STATUS.UNPROCESSABLE };
+      let errMessages = Object.keys(error.errors)
+        .map((key) => error.errors[key].message)
+        .join(" | ");
+      throw { err: errMessages, code: STATUS.UNPROCESSABLE };
     }
     throw error;
   }
@@ -42,11 +41,10 @@ const updateBooking = async (data, bookingId) => {
   } catch (error) {
     console.log(error);
     if (error.name == "ValidationError") {
-      let err = {};
-      Object.keys(error.errors).forEach((key) => {
-        err[key] = error.errors[key].message;
-      });
-      throw { err: err, code: STATUS.UNPROCESSABLE };
+      let errMessages = Object.keys(error.errors)
+        .map((key) => error.errors[key].message)
+        .join(" | ");
+      throw { err: errMessages, code: STATUS.UNPROCESSABLE };
     }
     throw error;
   }

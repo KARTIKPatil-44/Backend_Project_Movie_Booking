@@ -23,12 +23,11 @@ const createShow = async (data) =>{
         return responce;
     }catch(error){
         if(error.name == "ValidationError"){
-            let err = {};
-            Object.keys(error.errors).forEach(key =>{
-                err[key] = error.errors[key].message;
-            });
+            let errMessages = Object.keys(error.errors)
+                .map(key => error.errors[key].message)
+                .join(" | ");
             throw {
-                err,
+                err: errMessages,
                 code: STATUS.UNPROCESSABLE
             }
         }
@@ -88,12 +87,11 @@ const updateShow = async(id, data)=>{
         return responce;
     }catch(error){
         if(error.name == "ValidationError"){
-            let err = {};
-            Object.keys(error.errors).forEach(key =>{
-                err[key] = error.errors[key].message;
-            });
+            let errMessages = Object.keys(error.errors)
+                .map(key => error.errors[key].message)
+                .join(" | ");
             throw {
-                err,
+                err: errMessages,
                 code: STATUS.UNPROCESSABLE
             }
         }
