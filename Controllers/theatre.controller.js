@@ -25,6 +25,10 @@ const createTheatre = async (req, res) => {
     );
     return res.status(STATUS.OK).json(successResponseBody);
   } catch (err) {
+    if (err.err) {
+      errorResponseBody.err = err.err;
+      return res.status(err.code).json(errorResponseBody);
+    }
     errorResponseBody.err = err;
     return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }

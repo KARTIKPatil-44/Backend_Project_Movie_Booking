@@ -15,7 +15,7 @@ const createTheatre = async (data) => {
       Object.keys(error.errors).forEach((key) => {
         err[key] = error.errors[key].message;
       });
-      return { err: err, code: STATUS.UNPROCESSABLE };
+      throw { err: err, code: STATUS.UNPROCESSABLE };
     } else {
       console.log(error); // FIXED (err -> error)
       throw error;
