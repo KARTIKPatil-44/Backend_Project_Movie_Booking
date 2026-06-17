@@ -102,7 +102,7 @@ const isAuthenticated = async (req, res, next) => {
     req.user = user.id;
      next();
   } catch (error) {
-    if (error.name == "jsonWebTokenError") {
+    if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {
       errorResponseBody.err = error.message;
       return res.status(STATUS.UNAUTHORISED).json(errorResponseBody);
     }
@@ -110,7 +110,7 @@ const isAuthenticated = async (req, res, next) => {
       errorResponseBody.err = "User dosen't exist";
       return res.status(error.code).json(errorResponseBody);
     }
-    errorResponseBody.err = error;
+    errorResponseBody.err = error.message || error;
     return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
   }
 };
